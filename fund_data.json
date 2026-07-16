@@ -29,5 +29,5 @@
   "days": [],
   "transactions": [],
   "skips": [],
-  "articles": []
+  "articles": [{ "day": 0, "date": "2026-07-17", "title": "開催前レポート", "src": "day0.png" }]
 }
