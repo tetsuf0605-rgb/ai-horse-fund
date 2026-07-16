@@ -435,9 +435,16 @@ transactions: [ 買い目1点ごとに1件 {
   betType: "単勝"|"複勝"|"枠連"|"馬連"|"ワイド"|"馬単"|"3連複"|"3連単",
   selection: "7" や "3-5-7" など買い目表記,
   stake: 投資額(円), payout: 払戻額(円・不的中は0),
+  status: "hit"|"miss"|"refund",   // 返還は"refund"必須。省略時はpayout>0で自動判定（後方互換）
   estWinProb: 推定勝率%(任意), odds: 予想時単勝オッズ(任意),
   eval: "良い判断・不的中" など判断評価(任意), note: 備考(任意)
 } ]
+
+【返還（出走取消・競走除外等）の記録ルール】
+- payout に返還額（＝stake）を計上し、status を "refund" にする（残高変動±0）
+- refund は有効投資・有効払戻・回収率・券種別/戦略別/自信度別集計から自動除外される
+- 的中判定：hit=的中／miss=不的中／refund=ノーカウント
+- 全点返還レースは参戦数に数えるが、的中率の分母（有効参戦レース）からは除外される
 
 skips: [ 見送り1件ごと {
   day: 1, ai: "claude", race: "浦和3R", reason: "見送り理由",
@@ -463,34 +470,43 @@ const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt
 const pnlSpan = v => `<span class="num ${v>=0?'pnl-plus':'pnl-minus'}">${v>=0?'+':'−'}${Math.abs(v).toLocaleString("ja-JP")}</span>`;
 
 /* ---------- 集計コア ---------- */
+// 取引ステータス判定：status明示が正。無い場合は後方互換でpayoutから判定
+function txStatus(t){
+  if(t.status) return t.status; // "hit" | "miss" | "refund"
+  return (t.payout||0) > 0 ? "hit" : "miss";
+}
 function computeFund(ai){
   const init = DATA.meta.initialBalance;
   const txs = DATA.transactions.filter(t => t.ai === ai).sort((a,b)=>a.day-b.day);
   let bal = init, peak = init, maxDD = 0, stake = 0, payout = 0;
   const dayEnd = {}; // day -> balance
   for(const t of txs){
-    bal += (t.payout - t.stake);
-    stake += t.stake; payout += t.payout;
+    bal += ((t.payout||0) - (t.stake||0)); // 返還は±0なので残高に影響しない
+    if(txStatus(t) !== "refund"){ // 返還は有効投資・有効払戻から除外（回収率を歪めない）
+      stake += (t.stake||0); payout += (t.payout||0);
+    }
     if(bal > peak) peak = bal;
     if(peak - bal > maxDD) maxDD = peak - bal;
     dayEnd[t.day] = bal;
   }
-  // レース単位の的中
+  // レース単位：参戦=全レース／的中率の分母=有効レース（全点返還はノーカウント）
   const raceKey = t => t.day + "|" + (t.track||"") + "|" + t.race;
-  const races = new Map();
+  const races = new Map(); // key -> {valid, hit}
   for(const t of txs){
     const k = raceKey(t);
-    if(!races.has(k)) races.set(k, false);
-    if(t.payout > 0) races.set(k, true);
+    if(!races.has(k)) races.set(k, {valid:false, hit:false});
+    const r = races.get(k), st = txStatus(t);
+    if(st !== "refund"){ r.valid = true; if(st === "hit") r.hit = true; }
   }
-  const raceN = races.size;
-  const hitN = [...races.values()].filter(Boolean).length;
+  const raceN = races.size; // 参戦レース数（全点返還レースも参戦に数える）
+  const validRaceN = [...races.values()].filter(r=>r.valid).length;
+  const hitN = [...races.values()].filter(r=>r.hit).length;
   const skipN = (DATA.skips||[]).filter(s => s.ai === ai).length;
   const fees = (DATA.meta.fees||{})[ai] || 0;
   return {
     balance: bal, net: bal - fees, fees, stake, payout,
     roi: stake > 0 ? payout / stake : null,
-    raceN, hitN, hitRate: raceN > 0 ? hitN / raceN : null,
+    raceN, validRaceN, hitN, hitRate: validRaceN > 0 ? hitN / validRaceN : null,
     skipN, partRate: (raceN + skipN) > 0 ? raceN / (raceN + skipN) : null,
     peak, maxDD, dayEnd
   };
@@ -568,7 +584,7 @@ function renderFundCards(){
       </div>
       <div class="stat-grid">
         <div class="stat"><div class="k">回収率</div><div class="v num">${pct(s.roi)}</div></div>
-        <div class="stat"><div class="k">的中率</div><div class="v num">${s.raceN?`${pct(s.hitRate)}<div style="font-size:10px;color:var(--muted);">${s.hitN}/${s.raceN}R</div>`:"−"}</div></div>
+        <div class="stat"><div class="k">的中率</div><div class="v num">${s.validRaceN?`${pct(s.hitRate)}<div style="font-size:10px;color:var(--muted);">${s.hitN}/${s.validRaceN}R</div>`:"−"}</div></div>
         <div class="stat"><div class="k">見送り</div><div class="v num">${s.skipN}<span style="font-size:11px;">件</span></div></div>
         <div class="stat"><div class="k">投資合計</div><div class="v num">${s.stake.toLocaleString("ja-JP")}</div></div>
         <div class="stat"><div class="k">払戻合計</div><div class="v num">${s.payout.toLocaleString("ja-JP")}</div></div>
@@ -631,11 +647,13 @@ function renderDayCards(){
   el.innerHTML = days.map(d => {
     const rows = AIS.map(ai => {
       const txs = DATA.transactions.filter(t => t.ai===ai && t.day===d.day);
-      const stake = txs.reduce((a,t)=>a+t.stake,0), payout = txs.reduce((a,t)=>a+t.payout,0);
+      const eff = txs.filter(t => txStatus(t) !== "refund");
+      const stake = eff.reduce((a,t)=>a+(t.stake||0),0), payout = eff.reduce((a,t)=>a+(t.payout||0),0);
       const races = new Set(txs.map(t=>t.race)).size;
-      const hits = new Set(txs.filter(t=>t.payout>0).map(t=>t.race)).size;
+      const hits = new Set(txs.filter(t=>txStatus(t)==="hit").map(t=>t.race)).size;
+      const refunds = txs.filter(t=>txStatus(t)==="refund").length;
       const skips = (DATA.skips||[]).filter(s=>s.ai===ai && s.day===d.day).length;
-      return {ai, stake, payout, pnl: payout-stake, races, hits, skips};
+      return {ai, stake, payout, pnl: payout-stake, races, hits, refunds, skips};
     });
     const w = rows[0].pnl === rows[1].pnl ? null : (rows[0].pnl > rows[1].pnl ? rows[0].ai : rows[1].ai);
     const winnerTxt = w === null ? "引き分け" : `${DATA.funds[w].name} 勝利`;
@@ -650,13 +668,13 @@ function renderDayCards(){
       </summary>
       <div class="day-body">
         <table class="day-table">
-          <tr><th>ファンド</th><th>投資</th><th>払戻</th><th>収支</th><th>参戦R</th><th>的中R</th><th>見送り</th></tr>
+          <tr><th>ファンド</th><th>有効投資</th><th>払戻</th><th>収支</th><th>参戦R</th><th>的中R</th><th>返還</th><th>見送り</th></tr>
           ${rows.map(r=>`<tr>
             <td><span class="ai-tag ${r.ai}">${DATA.funds[r.ai].name}</span></td>
             <td class="num">${r.stake.toLocaleString("ja-JP")}</td>
             <td class="num">${r.payout.toLocaleString("ja-JP")}</td>
             <td>${pnlSpan(r.pnl)}</td>
-            <td class="num">${r.races}</td><td class="num">${r.hits}</td><td class="num">${r.skips}</td>
+            <td class="num">${r.races}</td><td class="num">${r.hits}</td><td class="num">${r.refunds||"−"}</td><td class="num">${r.skips}</td>
           </tr>`).join("")}
         </table>
         ${cmts.best ? `<div class="cmt"><b>ベストベット：</b>${esc(cmts.best)}</div>` : ""}
@@ -694,7 +712,7 @@ function renderLog(){
       <td class="num">${(t.stake||0).toLocaleString("ja-JP")}</td>
       <td class="num">${(t.payout||0).toLocaleString("ja-JP")}</td>
       <td>${pnlSpan((t.payout||0)-(t.stake||0))}</td>
-      <td>${t.payout>0?'<span class="hit">◎的中</span>':'<span class="miss">不的中</span>'}</td>
+      <td>${txStatus(t)==="hit"?'<span class="hit">◎的中</span>':txStatus(t)==="refund"?'<span style="color:var(--minus);font-weight:700;">↩返還</span>':'<span class="miss">不的中</span>'}</td>
       <td style="font-size:11px;color:var(--muted);">${esc(t.eval||"")}</td>
     </tr>`).join("")}</tbody></table>`;
 }
@@ -712,10 +730,11 @@ function renderLogFilters(){
 function aggBy(keyFn, labelAll){
   const groups = {};
   for(const t of DATA.transactions){
+    if(txStatus(t) === "refund") continue; // 返還は成績集計から除外
     const k = keyFn(t) || "（未分類）";
     if(!groups[k]) groups[k] = {gpt:{s:0,p:0,n:0,h:0}, claude:{s:0,p:0,n:0,h:0}};
     const g = groups[k][t.ai];
-    g.s += t.stake; g.p += t.payout; g.n += 1; if(t.payout>0) g.h += 1;
+    g.s += (t.stake||0); g.p += (t.payout||0); g.n += 1; if(txStatus(t)==="hit") g.h += 1;
   }
   return groups;
 }
@@ -742,7 +761,7 @@ function renderAgg(elId, keyFn, emptyMsg){
 }
 function renderConf(){
   const el = document.getElementById("agg-conf");
-  const withConf = DATA.transactions.filter(t=>t.confidence);
+  const withConf = DATA.transactions.filter(t=>t.confidence && txStatus(t)!=="refund");
   if(!withConf.length){ el.innerHTML = `<div class="empty" style="border:none;">データが揃うと、自信度A〜D別の的中率・回収率と推定勝率の較正を表示します。</div>`; return; }
   const order = ["A","B","C","D"];
   const rows = [];
@@ -750,8 +769,8 @@ function renderConf(){
     for(const c of order){
       const txs = withConf.filter(t=>t.ai===ai && t.confidence===c);
       if(!txs.length) continue;
-      const s = txs.reduce((a,t)=>a+t.stake,0), p = txs.reduce((a,t)=>a+t.payout,0);
-      const h = txs.filter(t=>t.payout>0).length;
+      const s = txs.reduce((a,t)=>a+(t.stake||0),0), p = txs.reduce((a,t)=>a+(t.payout||0),0);
+      const h = txs.filter(t=>txStatus(t)==="hit").length;
       const est = txs.filter(t=>t.estWinProb!=null);
       const avgEst = est.length ? (est.reduce((a,t)=>a+t.estWinProb,0)/est.length).toFixed(0)+"%" : "−";
       rows.push(`<tr>
