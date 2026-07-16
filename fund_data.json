@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "season": 1,
+    "totalDays": 10,
+    "currentDay": 0,
+    "lastUpdated": "2026-07-16",
+    "initialBalance": 30000,
+    "fees": {
+      "gpt": 0,
+      "claude": 0
+    }
+  },
+  "funds": {
+    "gpt": {
+      "name": "GPT Fund",
+      "style": "選択的期待値重視型",
+      "riskScore": "4/10",
+      "mainBets": "単勝・馬連・3連複",
+      "strategy": "市場より過小評価されている馬と買い方を探す。1開催日20%以内、3連複を主要高配当戦略。"
+    },
+    "claude": {
+      "name": "Claude Fund",
+      "style": "期待値回収型・生存優先",
+      "riskScore": "3/10",
+      "mainBets": "単勝・複勝・ワイド",
+      "strategy": "推定勝率×オッズ>1.2のみ参戦。1開催日20%以内、3連系は原則封印。見送りは損失ゼロのポジション。"
+    }
+  },
+  "days": [],
+  "transactions": [],
+  "skips": [],
+  "articles": []
+}

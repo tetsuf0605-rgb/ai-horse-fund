@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AI Horse Fund">
+<meta name="theme-color" content="#0f1512">
+<title>AI Horse Fund 観戦ボード</title>
+<style>
+  :root{
+    --bg:#0f1512; --panel:#171f1a; --panel2:#1c2620; --line:#2b3a31;
+    --text:#e9ede9; --muted:#8fa096; --amber:#ffbf57; --plus:#ffbf57; --minus:#7fb2e5;
+    --gpt:#4ecb7d; --claude:#ff8a3d; --focus:#ffd98a;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{transition:none !important; animation:none !important;} }
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:"Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic","Meiryo",sans-serif;
+    font-size:14px; line-height:1.65;
+  }
+  .num{ font-family:"Consolas","Roboto Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; letter-spacing:.03em; }
+  a{color:var(--amber);}
+  button{font-family:inherit;}
+  button:focus-visible, [tabindex]:focus-visible{outline:2px solid var(--focus); outline-offset:2px;}
+
+  .wrap{max-width:1080px; margin:0 auto; padding:20px 16px calc(96px + env(safe-area-inset-bottom));}
+
+  /* ===== タブ ===== */
+  .tab-page{display:none;}
+  .tab-page.active{display:block; animation:fadein .18s ease;}
+  @keyframes fadein{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:none;}}
+  nav.tabbar{
+    position:fixed; left:50%; transform:translateX(-50%);
+    bottom:calc(10px + env(safe-area-inset-bottom));
+    display:flex; gap:2px; z-index:40;
+    background:rgba(23,31,26,.92); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    border:1px solid var(--line); border-radius:18px; padding:6px;
+    box-shadow:0 6px 24px rgba(0,0,0,.45);
+    width:min(96vw, 520px);
+  }
+  nav.tabbar button{
+    flex:1; background:none; border:none; color:var(--muted); cursor:pointer;
+    border-radius:12px; padding:7px 2px 6px; font-size:10.5px; line-height:1.3;
+    display:flex; flex-direction:column; align-items:center; gap:2px;
+  }
+  nav.tabbar button .ico{font-size:18px;}
+  nav.tabbar button.on{background:var(--panel2); color:var(--amber); font-weight:700;}
+
+
+  /* ===== ヘッダー ===== */
+  header{
+    display:flex; flex-wrap:wrap; align-items:baseline; gap:10px 18px;
+    border-bottom:2px solid var(--line); padding-bottom:14px; margin-bottom:22px;
+  }
+  .brand{font-size:26px; font-weight:800; letter-spacing:.06em;}
+  .brand .vs{color:var(--muted); font-size:15px; font-weight:600; margin-left:10px;}
+  .season-plate{
+    margin-left:auto; background:var(--panel); border:1px solid var(--line); border-radius:6px;
+    padding:6px 14px; text-align:center;
+  }
+  .season-plate .t{font-size:11px; color:var(--muted); letter-spacing:.15em;}
+  .season-plate .d{font-size:20px; font-weight:800; color:var(--amber);}
+  .updated{width:100%; font-size:12px; color:var(--muted);}
+
+  section{margin-bottom:30px;}
+  h2{
+    font-size:15px; letter-spacing:.12em; color:var(--muted); font-weight:700;
+    border-left:4px solid var(--amber); padding-left:10px; margin-bottom:12px;
+  }
+  .panel{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px;}
+  .note{font-size:12px; color:var(--muted);}
+
+  /* ===== コース（シーズン進捗） ===== */
+  .course{position:relative; padding:8px 4px 2px;}
+  .course svg{width:100%; height:auto; display:block;}
+
+  /* ===== ファンド比較カード ===== */
+  .fund-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media(max-width:720px){ .fund-grid{grid-template-columns:1fr;} }
+  .fund-card{border-radius:10px; border:1px solid var(--line); background:var(--panel); overflow:hidden;}
+  .fund-card .head{display:flex; align-items:center; gap:10px; padding:12px 14px; border-bottom:1px solid var(--line);}
+  .cap{width:22px; height:22px; border-radius:50%; border:2px solid #fff3; display:inline-flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; color:#101512;}
+  .fund-gpt .cap{background:var(--gpt);} .fund-claude .cap{background:var(--claude);}
+  .fund-card .head .name{font-weight:800; font-size:16px;}
+  .fund-gpt .head .name{color:var(--gpt);} .fund-claude .head .name{color:var(--claude);}
+  .fund-card .style{margin-left:auto; font-size:11px; color:var(--muted); text-align:right;}
+  .net{padding:14px; text-align:center; border-bottom:1px solid var(--line); background:var(--panel2);}
+  .net .label{font-size:11px; color:var(--muted); letter-spacing:.2em;}
+  .net .value{font-size:34px; font-weight:800; color:var(--amber);}
+  .net .sub{font-size:12px; color:var(--muted);}
+  .stat-grid{display:grid; grid-template-columns:repeat(3,1fr);}
+  .stat{padding:10px 8px; text-align:center; border-top:1px solid var(--line);}
+  .stat:nth-child(-n+3){border-top:none;}
+  .stat .k{font-size:10px; color:var(--muted); letter-spacing:.08em;}
+  .stat .v{font-size:16px; font-weight:700;}
+
+  /* ===== グラフ ===== */
+  .chart-tools{display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap;}
+  .tgl{
+    background:var(--panel2); color:var(--muted); border:1px solid var(--line); border-radius:20px;
+    padding:5px 14px; font-size:12px; cursor:pointer;
+  }
+  .tgl.on{color:#101512; background:var(--amber); border-color:var(--amber); font-weight:700;}
+  .legend{display:flex; gap:16px; font-size:12px; color:var(--muted); margin-top:8px;}
+  .legend .sw{display:inline-block; width:18px; height:4px; border-radius:2px; vertical-align:middle; margin-right:6px;}
+
+  /* ===== 開催日カード ===== */
+  .daycard{border:1px solid var(--line); border-radius:10px; margin-bottom:12px; overflow:hidden; background:var(--panel);}
+  .daycard summary{
+    list-style:none; cursor:pointer; display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px;
+    padding:12px 14px; background:var(--panel2);
+  }
+  .daycard summary::-webkit-details-marker{display:none;}
+  .daynum{font-weight:800; color:var(--amber); font-size:15px; letter-spacing:.05em;}
+  .dayinfo{color:var(--muted); font-size:12px;}
+  .day-winner{margin-left:auto; font-size:12px; font-weight:700; padding:3px 10px; border-radius:12px; background:#0d120f; border:1px solid var(--line);}
+  .day-body{padding:14px;}
+  .day-table{width:100%; border-collapse:collapse; font-size:13px; margin-bottom:10px;}
+  .day-table th,.day-table td{padding:6px 8px; border-bottom:1px solid var(--line); text-align:right;}
+  .day-table th:first-child,.day-table td:first-child{text-align:left;}
+  .cmt{font-size:12px; margin-top:8px; padding:8px 10px; background:var(--panel2); border-radius:8px;}
+  .cmt b{color:var(--amber);}
+
+  /* ===== テーブル共通 ===== */
+  .tablewrap{overflow-x:auto;}
+  table.log{width:100%; border-collapse:collapse; font-size:12.5px; white-space:nowrap;}
+  table.log th{
+    text-align:left; color:var(--muted); font-weight:600; font-size:11px; letter-spacing:.05em;
+    padding:8px; border-bottom:2px solid var(--line); position:sticky; top:0; background:var(--panel);
+  }
+  table.log td{padding:7px 8px; border-bottom:1px solid var(--line);}
+  .ai-tag{display:inline-block; padding:1px 8px; border-radius:10px; font-size:11px; font-weight:700; color:#101512;}
+  .ai-tag.gpt{background:var(--gpt);} .ai-tag.claude{background:var(--claude);}
+  .pnl-plus{color:var(--plus); font-weight:700;} .pnl-minus{color:var(--minus);}
+  .hit{color:var(--amber); font-weight:700;} .miss{color:var(--muted);}
+  .filters{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;}
+  select{
+    background:var(--panel2); color:var(--text); border:1px solid var(--line); border-radius:6px;
+    padding:5px 10px; font-size:12px; font-family:inherit;
+  }
+
+  /* ===== 集計バー ===== */
+  .agg-row{display:grid; grid-template-columns:100px 1fr 220px; align-items:center; gap:10px; padding:7px 0; border-bottom:1px solid var(--line); font-size:12.5px;}
+  @media(max-width:640px){ .agg-row{grid-template-columns:80px 1fr 150px;} }
+  .agg-row .nm{font-weight:700;}
+  .bar{height:16px; border-radius:4px; background:var(--panel2); position:relative; overflow:hidden;}
+  .bar .fill{position:absolute; inset:0 auto 0 0; border-radius:4px;}
+  .agg-row .meta{text-align:right; color:var(--muted); font-size:11.5px;}
+
+  /* ===== Fund Letter ===== */
+  .letters{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  @media(max-width:720px){ .letters{grid-template-columns:1fr;} }
+  .letter{border:1px solid var(--line); border-radius:10px; padding:12px 14px; background:var(--panel); font-size:13px;}
+  .letter .who{font-weight:800; margin-bottom:6px;}
+  .letter.gpt .who{color:var(--gpt);} .letter.claude .who{color:var(--claude);}
+  .letter .body{white-space:pre-wrap; color:var(--text);}
+
+  /* ===== 空状態 ===== */
+  .empty{
+    text-align:center; padding:36px 16px; color:var(--muted); font-size:13px;
+    border:1px dashed var(--line); border-radius:10px; background:var(--panel);
+  }
+  .empty .big{font-size:28px; margin-bottom:8px;}
+
+  /* ===== 観戦記事 ===== */
+  .article-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(220px,1fr)); gap:14px;}
+  .article-card{
+    border:1px solid var(--line); border-radius:10px; overflow:hidden; background:var(--panel);
+    cursor:pointer; transition:transform .15s ease, border-color .15s ease; text-align:left; padding:0; color:inherit;
+  }
+  .article-card:hover{transform:translateY(-2px); border-color:var(--amber);}
+  .article-card img{width:100%; aspect-ratio:16/11; object-fit:cover; display:block; background:#0c110e;}
+  .article-card .cap-line{padding:9px 12px; font-size:12px;}
+  .article-card .cap-line .d{color:var(--amber); font-weight:800; margin-right:8px;}
+  .article-card .cap-line .t{color:var(--text); font-weight:600;}
+  .article-card .cap-line .n{display:block; color:var(--muted); font-size:11px; margin-top:2px;}
+  .lightbox{
+    position:fixed; inset:0; background:rgba(8,12,10,.92); z-index:50;
+    display:none; align-items:center; justify-content:center; flex-direction:column; padding:24px;
+  }
+  .lightbox.open{display:flex;}
+  .lightbox img{max-width:min(96vw,1100px); max-height:82vh; border-radius:8px; border:1px solid var(--line);}
+  .lightbox .lb-cap{color:var(--text); font-size:13px; margin-top:12px; text-align:center;}
+  .lightbox .lb-close{
+    position:absolute; top:16px; right:20px; background:var(--panel2); color:var(--text);
+    border:1px solid var(--line); border-radius:20px; padding:6px 16px; cursor:pointer; font-size:13px;
+  }
+  .article-add{margin-top:14px; padding-top:12px; border-top:1px dashed var(--line);}
+  .article-add .row{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:8px;}
+  .article-add input[type="text"], .article-add input[type="number"]{
+    background:var(--panel2); color:var(--text); border:1px solid var(--line); border-radius:6px;
+    padding:6px 10px; font-size:12px; font-family:inherit;
+  }
+  .article-add input[type="number"]{width:80px;}
+  .article-add input[type="file"]{font-size:12px; color:var(--muted);}
+
+  /* ===== データ更新 ===== */
+  textarea{
+    width:100%; min-height:140px; background:#0c110e; color:var(--text); border:1px solid var(--line);
+    border-radius:8px; padding:10px; font-family:"Consolas",ui-monospace,monospace; font-size:12px;
+  }
+  .btn{
+    background:var(--amber); color:#101512; font-weight:800; border:none; border-radius:8px;
+    padding:8px 18px; cursor:pointer; font-size:13px; margin-top:8px;
+  }
+  .btn.sub{background:var(--panel2); color:var(--text); border:1px solid var(--line); font-weight:600;}
+  .msg{font-size:12px; margin-top:6px; min-height:18px;}
+  details.guide{margin-top:12px; font-size:12.5px;}
+  details.guide summary{cursor:pointer; color:var(--amber); font-weight:700;}
+  details.guide pre{
+    background:#0c110e; border:1px solid var(--line); border-radius:8px; padding:12px;
+    overflow-x:auto; font-size:11.5px; margin-top:8px; line-height:1.5;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="brand">AI HORSE FUND<span class="vs">GPT Fund × Claude Fund</span></div>
+  <div class="season-plate">
+    <div class="t">SEASON <span id="h-season">1</span></div>
+    <div class="d num"><span id="h-day">0</span><span style="font-size:13px;color:var(--muted);"> / <span id="h-total">10</span>日</span></div>
+  </div>
+  <div class="updated">最終更新：<span id="h-updated">−</span>　｜　データ元：<span id="h-source">読み込み中…</span>　｜　正本：Claude管理の公式台帳（本ボードは可視化用の補助資料）</div>
+</header>
+
+<div class="tab-page active" id="page-home">
+<!-- シーズン進捗コース -->
+<section>
+  <h2>SEASON PROGRESS ─ 10開催日コース</h2>
+  <div class="panel course" id="course"></div>
+</section>
+
+<!-- ファンド比較カード -->
+<section>
+  <h2>FUND CARDS ─ ファンド比較</h2>
+  <div class="fund-grid" id="fund-cards"></div>
+</section>
+
+<!-- 資産推移 -->
+<section>
+  <h2>ASSET CHART ─ 資産推移</h2>
+  <div class="panel">
+    <div class="chart-tools">
+      <button class="tgl on" data-mode="balance">残高</button>
+      <button class="tgl" data-mode="net">純資産</button>
+    </div>
+    <div id="chart"></div>
+    <div class="legend">
+      <span><span class="sw" style="background:var(--gpt);"></span>GPT Fund</span>
+      <span><span class="sw" style="background:var(--claude);"></span>Claude Fund</span>
+      <span><span class="sw" style="background:var(--line);"></span>初期資金 30,000円</span>
+    </div>
+  </div>
+</section>
+</div><!-- /page-home -->
+
+<div class="tab-page" id="page-days">
+<!-- 開催日別対戦カード -->
+<section>
+  <h2>DAY CARDS ─ 開催日別対戦</h2>
+  <div id="day-cards"></div>
+</section>
+</div><!-- /page-days -->
+
+<div class="tab-page" id="page-log">
+<!-- 取引ログ -->
+<section>
+  <h2>TRANSACTION LOG ─ 取引ログ</h2>
+  <div class="panel">
+    <div class="filters">
+      <select id="f-ai"><option value="">AI：すべて</option><option value="gpt">GPT</option><option value="claude">Claude</option></select>
+      <select id="f-bet"><option value="">券種：すべて</option></select>
+      <select id="f-day"><option value="">開催日：すべて</option></select>
+    </div>
+    <div class="tablewrap" id="log-table"></div>
+  </div>
+</section>
+
+<!-- 券種別集計 -->
+<section>
+  <h2>BY BET TYPE ─ 券種別成績（自動集計）</h2>
+  <div class="panel" id="agg-bet"></div>
+</section>
+
+<!-- 戦略別集計 -->
+<section>
+  <h2>BY STRATEGY ─ 戦略別成績（自動集計）</h2>
+  <div class="panel" id="agg-strategy"></div>
+</section>
+
+<!-- 予測較正 -->
+<section>
+  <h2>CALIBRATION ─ 自信度別成績（自動集計）</h2>
+  <div class="panel" id="agg-conf"></div>
+</section>
+</div><!-- /page-log -->
+
+<div class="tab-page" id="page-media">
+<!-- Fund Letter -->
+<section>
+  <h2>FUND LETTERS ─ 運用日誌</h2>
+  <div id="letters"></div>
+</section>
+
+<!-- 観戦記事 -->
+<section>
+  <h2>MATCH REPORTS ─ 観戦記事</h2>
+  <div class="panel">
+    <div id="article-gallery"></div>
+    <div class="article-add">
+      <p class="note">記事画像はこのHTMLと<b>同じフォルダ</b>に置く（相対パス方式）。下でエントリを作って「現在のデータをJSONで表示」→ FUND_DATAブロックへ貼れば恒久保存される。</p>
+      <div class="row">
+        <input type="number" id="art-day" min="0" placeholder="日" title="開催日（開幕前は0）">
+        <input type="text" id="art-title" placeholder="タイトル（例：開幕準備完了）" style="flex:1; min-width:140px;">
+        <input type="text" id="art-file" placeholder="ファイル名（例：day1.png）" style="flex:1; min-width:140px;">
+        <button class="btn sub" id="art-add-btn" style="margin-top:0;">記事を追加</button>
+      </div>
+      <div class="msg" id="art-msg"></div>
+    </div>
+  </div>
+</section>
+</div><!-- /page-media -->
+
+<div class="tab-page" id="page-data">
+<!-- データ更新 -->
+<section>
+  <h2>DATA ─ データ更新</h2>
+  <div class="panel">
+    <p class="note" style="margin-bottom:8px;">
+      <b>同期運用（GitHub Pages）：</b>リポジトリ内の <b>fund_data.json</b> をGPT生成のJSONで差し替えてコミットすれば、全端末のボードに反映される（記事画像も同リポジトリに置く）。<br>
+      <b>ローカル運用：</b>fund_data.json が読めない環境では、このファイル内のFUND_DATAブロック（内蔵データ）で表示される。<br>
+      <b>一時確認：</b>下の欄にJSONを貼って反映ボタン。表示のみ更新され、保存はされない。
+    </p>
+    <textarea id="paste" placeholder='ここに FUND_DATA のJSONを貼り付け（例：{"meta":{...},"funds":{...},"days":[...],"transactions":[...]}）'></textarea>
+    <button class="btn" id="apply">貼り付けデータを反映</button>
+    <button class="btn sub" id="show-current">現在のデータをJSONで表示</button>
+    <div class="msg" id="msg"></div>
+    <details class="guide">
+      <summary>GPT向け：データ生成ガイド（スキーマ仕様）</summary>
+      <pre id="schema-guide"></pre>
+    </details>
+  </div>
+</section>
+</div><!-- /page-data -->
+
+</div>
+
+<nav class="tabbar" aria-label="ページ切替">
+  <button class="on" data-page="page-home"><span class="ico">🏠</span>ホーム</button>
+  <button data-page="page-days"><span class="ico">🏇</span>対戦</button>
+  <button data-page="page-log"><span class="ico">📒</span>ログ</button>
+  <button data-page="page-media"><span class="ico">📰</span>記事</button>
+  <button data-page="page-data"><span class="ico">⚙️</span>データ</button>
+</nav>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-label="観戦記事の拡大表示">
+  <button class="lb-close" id="lb-close">閉じる ✕</button>
+  <img id="lb-img" src="" alt="観戦記事">
+  <div class="lb-cap" id="lb-cap"></div>
+</div>
+
+<script>
+/* ============================================================
+   ===================== DATA START ===========================
+   GPTはこのブロックのJSONだけを生成・差し替えればよい。
+   集計（回収率・的中率・券種別・戦略別・ドローダウン・較正）は
+   すべて transactions から自動計算される。
+   ============================================================ */
+const FUND_DATA = {
+  "meta": {
+    "season": 1,
+    "totalDays": 10,
+    "currentDay": 0,
+    "lastUpdated": "2026-07-16",
+    "initialBalance": 30000,
+    "fees": { "gpt": 0, "claude": 0 }
+  },
+  "funds": {
+    "gpt": {
+      "name": "GPT Fund",
+      "style": "選択的期待値重視型",
+      "riskScore": "4/10",
+      "mainBets": "単勝・馬連・3連複",
+      "strategy": "市場より過小評価されている馬と買い方を探す。1開催日20%以内、3連複を主要高配当戦略。"
+    },
+    "claude": {
+      "name": "Claude Fund",
+      "style": "期待値回収型・生存優先",
+      "riskScore": "3/10",
+      "mainBets": "単勝・複勝・ワイド",
+      "strategy": "推定勝率×オッズ>1.2のみ参戦。1開催日20%以内、3連系は原則封印。見送りは損失ゼロのポジション。"
+    }
+  },
+  "days": [],
+  "transactions": [],
+  "skips": [],
+  "articles": []
+};
+/* ============================================================
+   ====================== DATA END ============================
+   ============================================================ */
+
+/* ---------- スキーマガイド（GPT向け） ---------- */
+const SCHEMA_GUIDE = `【FUND_DATA スキーマ仕様】※Claudeの公式台帳を正としてこのJSONを生成する
+※このJSON全体を fund_data.json としてリポジトリに置く（コミット＝公式記録の更新）
+
+meta: {
+  season, totalDays(10), currentDay(消化開催日数), lastUpdated("YYYY-MM-DD"),
+  initialBalance(30000),
+  fees: { gpt: 累積AI利用料, claude: 同 }   // 月3,000円ずつ手動で加算
+}
+
+funds.gpt / funds.claude: {
+  name, style(運用スタイル), riskScore, mainBets(主力券種), strategy(現在の戦略・1〜2文)
+}
+
+days: [ 開催日ごとに1件 {
+  day: 1, date: "2026-07-17", track: "浦和",
+  comments: { best: "ベストベット", worst: "痛恨の判断", bestSkip: "ベスト見送り" }, // 任意
+  letters: { gpt: "Fund Letter要約", claude: "同" } // 任意
+} ]
+
+transactions: [ 買い目1点ごとに1件 {
+  day: 1, ai: "gpt"|"claude", track: "浦和", race: "3R", raceName: "レース名",
+  strategy: "本命集中型" など, confidence: "A"〜"D",
+  betType: "単勝"|"複勝"|"枠連"|"馬連"|"ワイド"|"馬単"|"3連複"|"3連単",
+  selection: "7" や "3-5-7" など買い目表記,
+  stake: 投資額(円), payout: 払戻額(円・不的中は0),
+  estWinProb: 推定勝率%(任意), odds: 予想時単勝オッズ(任意),
+  eval: "良い判断・不的中" など判断評価(任意), note: 備考(任意)
+} ]
+
+skips: [ 見送り1件ごと {
+  day: 1, ai: "claude", race: "浦和3R", reason: "見送り理由",
+  result: "実際の結果メモ"(任意), saved: true|false(資金保全につながったか・任意)
+} ]
+
+articles: [ 観戦記事（画像）1枚ごと {
+  day: 1(開幕前は0), date: "2026-07-17", title: "記事タイトル",
+  src: "day1.png" のようなファイル名（HTMLと同じフォルダに画像を置く・相対パス方式）,
+  note: "補足"(任意)
+} ]
+
+※残高・純資産・回収率・的中率・ドローダウン・券種別・戦略別・自信度別は
+  すべて自動計算されるため、JSONに含める必要はない。
+※的中判定は payout > 0 で自動判定。レース単位の的中は同一(day,ai,race)内に
+  payout>0 の買い目が1つでもあれば的中1レースと数える。`;
+
+/* ---------- ユーティリティ ---------- */
+let DATA = JSON.parse(JSON.stringify(FUND_DATA));
+const AIS = ["gpt","claude"];
+const yen = n => n.toLocaleString("ja-JP") + "円";
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pnlSpan = v => `<span class="num ${v>=0?'pnl-plus':'pnl-minus'}">${v>=0?'+':'−'}${Math.abs(v).toLocaleString("ja-JP")}</span>`;
+
+/* ---------- 集計コア ---------- */
+function computeFund(ai){
+  const init = DATA.meta.initialBalance;
+  const txs = DATA.transactions.filter(t => t.ai === ai).sort((a,b)=>a.day-b.day);
+  let bal = init, peak = init, maxDD = 0, stake = 0, payout = 0;
+  const dayEnd = {}; // day -> balance
+  for(const t of txs){
+    bal += (t.payout - t.stake);
+    stake += t.stake; payout += t.payout;
+    if(bal > peak) peak = bal;
+    if(peak - bal > maxDD) maxDD = peak - bal;
+    dayEnd[t.day] = bal;
+  }
+  // レース単位の的中
+  const raceKey = t => t.day + "|" + (t.track||"") + "|" + t.race;
+  const races = new Map();
+  for(const t of txs){
+    const k = raceKey(t);
+    if(!races.has(k)) races.set(k, false);
+    if(t.payout > 0) races.set(k, true);
+  }
+  const raceN = races.size;
+  const hitN = [...races.values()].filter(Boolean).length;
+  const skipN = (DATA.skips||[]).filter(s => s.ai === ai).length;
+  const fees = (DATA.meta.fees||{})[ai] || 0;
+  return {
+    balance: bal, net: bal - fees, fees, stake, payout,
+    roi: stake > 0 ? payout / stake : null,
+    raceN, hitN, hitRate: raceN > 0 ? hitN / raceN : null,
+    skipN, partRate: (raceN + skipN) > 0 ? raceN / (raceN + skipN) : null,
+    peak, maxDD, dayEnd
+  };
+}
+
+function balanceSeries(ai, mode){
+  const init = DATA.meta.initialBalance;
+  const fees = (DATA.meta.fees||{})[ai] || 0;
+  const f = computeFund(ai);
+  const pts = [{x:0, y:init}];
+  let last = init;
+  const maxD = Math.max(DATA.meta.currentDay, ...(DATA.days||[]).map(d=>d.day), 0);
+  for(let d=1; d<=maxD; d++){
+    if(f.dayEnd[d] !== undefined) last = f.dayEnd[d];
+    pts.push({x:d, y:last});
+  }
+  if(mode === "net") return pts.map(p => ({x:p.x, y:p.y - fees}));
+  return pts;
+}
+
+/* ---------- ヘッダー ---------- */
+function renderHeader(){
+  document.getElementById("h-season").textContent = DATA.meta.season;
+  document.getElementById("h-day").textContent = DATA.meta.currentDay;
+  document.getElementById("h-total").textContent = DATA.meta.totalDays;
+  document.getElementById("h-updated").textContent = DATA.meta.lastUpdated || "−";
+}
+
+/* ---------- コース ---------- */
+function renderCourse(){
+  const total = DATA.meta.totalDays, cur = Math.min(DATA.meta.currentDay, total);
+  const W = 1000, H = 150, x0 = 60, x1 = W - 80;
+  const xAt = d => x0 + (x1 - x0) * (d / total);
+  const g = computeFund("gpt"), c = computeFund("claude");
+  const lead = g.net === c.net ? null : (g.net > c.net ? "gpt" : "claude");
+  let marks = "";
+  for(let d=0; d<=total; d++){
+    const x = xAt(d);
+    marks += `<line x1="${x}" y1="52" x2="${x}" y2="108" stroke="var(--line)" stroke-width="${d===0||d===total?2.5:1}"/>`;
+    marks += `<text x="${x}" y="128" text-anchor="middle" fill="var(--muted)" font-size="11">${d===0?"開幕":d===total?"GOAL":d}</text>`;
+  }
+  const horse = (ai, y) => {
+    const x = xAt(cur);
+    const col = ai==="gpt" ? "var(--gpt)" : "var(--claude)";
+    const lbl = ai==="gpt" ? "G" : "C";
+    const star = lead===ai && cur>0 ? `<text x="${x+16}" y="${y+4}" font-size="11" fill="var(--amber)">★首位</text>` : "";
+    return `<circle cx="${x}" cy="${y}" r="10" fill="${col}" stroke="#fff5" stroke-width="2"/>
+            <text x="${x}" y="${y+4}" text-anchor="middle" font-size="10" font-weight="800" fill="#101512">${lbl}</text>${star}`;
+  };
+  document.getElementById("course").innerHTML = `
+  <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="シーズン進捗：${cur}日目/${total}日">
+    <rect x="${x0-20}" y="52" width="${x1-x0+40}" height="56" rx="10" fill="#132018"/>
+    ${marks}
+    <text x="${x1+14}" y="86" font-size="20">🏁</text>
+    ${horse("gpt", 70)}
+    ${horse("claude", 92)}
+    <text x="${x0-20}" y="30" fill="var(--muted)" font-size="12">消化 ${cur}日 ／ 残り ${total-cur}日${cur===0?"（開幕前）":""}</text>
+  </svg>`;
+}
+
+/* ---------- ファンドカード ---------- */
+function renderFundCards(){
+  const el = document.getElementById("fund-cards");
+  el.innerHTML = AIS.map(ai => {
+    const f = DATA.funds[ai], s = computeFund(ai);
+    const pct = v => v === null ? "−" : (v*100).toFixed(1) + "%";
+    return `
+    <div class="fund-card fund-${ai}">
+      <div class="head"><span class="cap">${ai==="gpt"?"G":"C"}</span><span class="name">${esc(f.name)}</span>
+        <span class="style">${esc(f.style)}<br>Risk ${esc(f.riskScore)}｜主力 ${esc(f.mainBets)}</span></div>
+      <div class="net">
+        <div class="label">NET ASSET 純資産</div>
+        <div class="value num">${s.net.toLocaleString("ja-JP")}<span style="font-size:15px;">円</span></div>
+        <div class="sub num">残高 ${yen(s.balance)} − 利用料 ${yen(s.fees)}</div>
+      </div>
+      <div class="stat-grid">
+        <div class="stat"><div class="k">回収率</div><div class="v num">${pct(s.roi)}</div></div>
+        <div class="stat"><div class="k">的中率</div><div class="v num">${s.raceN?`${pct(s.hitRate)}<div style="font-size:10px;color:var(--muted);">${s.hitN}/${s.raceN}R</div>`:"−"}</div></div>
+        <div class="stat"><div class="k">見送り</div><div class="v num">${s.skipN}<span style="font-size:11px;">件</span></div></div>
+        <div class="stat"><div class="k">投資合計</div><div class="v num">${s.stake.toLocaleString("ja-JP")}</div></div>
+        <div class="stat"><div class="k">払戻合計</div><div class="v num">${s.payout.toLocaleString("ja-JP")}</div></div>
+        <div class="stat"><div class="k">最大DD</div><div class="v num">${s.maxDD.toLocaleString("ja-JP")}</div></div>
+      </div>
+      <div style="padding:10px 14px; font-size:12px; color:var(--muted); border-top:1px solid var(--line);">現在の戦略：${esc(f.strategy)}</div>
+    </div>`;
+  }).join("");
+}
+
+/* ---------- 資産推移チャート ---------- */
+let chartMode = "balance";
+function renderChart(){
+  const W = 1000, H = 300, padL = 70, padR = 24, padT = 20, padB = 36;
+  const total = Math.max(DATA.meta.totalDays, 1);
+  const sg = balanceSeries("gpt", chartMode), sc = balanceSeries("claude", chartMode);
+  const all = [...sg, ...sc].map(p=>p.y);
+  const init = DATA.meta.initialBalance;
+  let lo = Math.min(...all, init), hi = Math.max(...all, init);
+  const span = Math.max(hi - lo, 4000);
+  lo = Math.max(0, lo - span*0.15); hi = hi + span*0.15;
+  const X = d => padL + (W-padL-padR) * (d/total);
+  const Y = v => padT + (H-padT-padB) * (1 - (v-lo)/(hi-lo));
+  const path = s => s.map((p,i)=>`${i?"L":"M"}${X(p.x).toFixed(1)},${Y(p.y).toFixed(1)}`).join(" ");
+  const dots = (s,col) => s.map(p=>`<circle cx="${X(p.x)}" cy="${Y(p.y)}" r="3.5" fill="${col}"><title>${p.x===0?"開幕":p.x+"日目"}: ${yen(p.y)}</title></circle>`).join("");
+  // Y軸目盛
+  let grid = "";
+  const steps = 4;
+  for(let i=0;i<=steps;i++){
+    const v = lo + (hi-lo)*i/steps;
+    grid += `<line x1="${padL}" y1="${Y(v)}" x2="${W-padR}" y2="${Y(v)}" stroke="var(--line)" stroke-width="0.6"/>
+             <text x="${padL-8}" y="${Y(v)+4}" text-anchor="end" fill="var(--muted)" font-size="11" class="num">${Math.round(v).toLocaleString("ja-JP")}</text>`;
+  }
+  let xlab = "";
+  for(let d=0; d<=total; d++){
+    xlab += `<text x="${X(d)}" y="${H-10}" text-anchor="middle" fill="var(--muted)" font-size="10">${d===0?"開幕":d}</text>`;
+  }
+  document.getElementById("chart").innerHTML = `
+  <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="資産推移グラフ（${chartMode==="balance"?"残高":"純資産"}）">
+    ${grid}${xlab}
+    <line x1="${padL}" y1="${Y(init)}" x2="${W-padR}" y2="${Y(init)}" stroke="var(--muted)" stroke-width="1" stroke-dasharray="5 5"/>
+    <path d="${path(sg)}" fill="none" stroke="var(--gpt)" stroke-width="2.5"/>
+    <path d="${path(sc)}" fill="none" stroke="var(--claude)" stroke-width="2.5"/>
+    ${dots(sg,"var(--gpt)")}${dots(sc,"var(--claude)")}
+  </svg>`;
+}
+document.querySelectorAll(".tgl").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll(".tgl").forEach(x=>x.classList.remove("on"));
+  b.classList.add("on"); chartMode = b.dataset.mode; renderChart();
+}));
+
+/* ---------- 開催日カード ---------- */
+function renderDayCards(){
+  const el = document.getElementById("day-cards");
+  const days = (DATA.days||[]).slice().sort((a,b)=>b.day-a.day);
+  if(!days.length){
+    el.innerHTML = `<div class="empty"><div class="big">🏇</div>開幕前 ─ 最初の開催日を待っています。<br>番組表の提示からシーズン1が始まります。</div>`;
+    return;
+  }
+  el.innerHTML = days.map(d => {
+    const rows = AIS.map(ai => {
+      const txs = DATA.transactions.filter(t => t.ai===ai && t.day===d.day);
+      const stake = txs.reduce((a,t)=>a+t.stake,0), payout = txs.reduce((a,t)=>a+t.payout,0);
+      const races = new Set(txs.map(t=>t.race)).size;
+      const hits = new Set(txs.filter(t=>t.payout>0).map(t=>t.race)).size;
+      const skips = (DATA.skips||[]).filter(s=>s.ai===ai && s.day===d.day).length;
+      return {ai, stake, payout, pnl: payout-stake, races, hits, skips};
+    });
+    const w = rows[0].pnl === rows[1].pnl ? null : (rows[0].pnl > rows[1].pnl ? rows[0].ai : rows[1].ai);
+    const winnerTxt = w === null ? "引き分け" : `${DATA.funds[w].name} 勝利`;
+    const winnerCol = w === null ? "var(--muted)" : (w==="gpt" ? "var(--gpt)" : "var(--claude)");
+    const cmts = d.comments || {};
+    return `
+    <details class="daycard" ${d.day===Math.max(...days.map(x=>x.day))?"open":""}>
+      <summary>
+        <span class="daynum">DAY ${d.day}</span>
+        <span class="dayinfo">${esc(d.date||"")}　${esc(d.track||"")}</span>
+        <span class="day-winner" style="color:${winnerCol}">${winnerTxt}</span>
+      </summary>
+      <div class="day-body">
+        <table class="day-table">
+          <tr><th>ファンド</th><th>投資</th><th>払戻</th><th>収支</th><th>参戦R</th><th>的中R</th><th>見送り</th></tr>
+          ${rows.map(r=>`<tr>
+            <td><span class="ai-tag ${r.ai}">${DATA.funds[r.ai].name}</span></td>
+            <td class="num">${r.stake.toLocaleString("ja-JP")}</td>
+            <td class="num">${r.payout.toLocaleString("ja-JP")}</td>
+            <td>${pnlSpan(r.pnl)}</td>
+            <td class="num">${r.races}</td><td class="num">${r.hits}</td><td class="num">${r.skips}</td>
+          </tr>`).join("")}
+        </table>
+        ${cmts.best ? `<div class="cmt"><b>ベストベット：</b>${esc(cmts.best)}</div>` : ""}
+        ${cmts.worst ? `<div class="cmt"><b>痛恨の判断：</b>${esc(cmts.worst)}</div>` : ""}
+        ${cmts.bestSkip ? `<div class="cmt"><b>ベスト見送り：</b>${esc(cmts.bestSkip)}</div>` : ""}
+      </div>
+    </details>`;
+  }).join("");
+}
+
+/* ---------- 取引ログ ---------- */
+function renderLog(){
+  const fa = document.getElementById("f-ai").value;
+  const fb = document.getElementById("f-bet").value;
+  const fd = document.getElementById("f-day").value;
+  let txs = DATA.transactions.slice().sort((a,b)=> b.day-a.day || (a.ai<b.ai?-1:1));
+  if(fa) txs = txs.filter(t=>t.ai===fa);
+  if(fb) txs = txs.filter(t=>t.betType===fb);
+  if(fd) txs = txs.filter(t=>String(t.day)===fd);
+  const el = document.getElementById("log-table");
+  if(!txs.length){
+    el.innerHTML = `<div class="empty" style="border:none;"><div class="big">📒</div>取引はまだありません。見送りを含む全記録は開催日終了後に反映されます。</div>`;
+    return;
+  }
+  el.innerHTML = `<table class="log">
+    <thead><tr><th>日</th><th>AI</th><th>レース</th><th>戦略</th><th>信</th><th>券種</th><th>買い目</th><th>投資</th><th>払戻</th><th>収支</th><th>結果</th><th>評価</th></tr></thead>
+    <tbody>${txs.map(t=>`<tr>
+      <td class="num">${t.day}</td>
+      <td><span class="ai-tag ${t.ai}">${t.ai==="gpt"?"GPT":"Claude"}</span></td>
+      <td>${esc(t.track||"")}${esc(t.race||"")}${t.raceName?`<span style="color:var(--muted);font-size:11px;"> ${esc(t.raceName)}</span>`:""}</td>
+      <td>${esc(t.strategy||"−")}</td>
+      <td>${esc(t.confidence||"−")}</td>
+      <td>${esc(t.betType||"")}</td>
+      <td class="num">${esc(t.selection||"")}</td>
+      <td class="num">${(t.stake||0).toLocaleString("ja-JP")}</td>
+      <td class="num">${(t.payout||0).toLocaleString("ja-JP")}</td>
+      <td>${pnlSpan((t.payout||0)-(t.stake||0))}</td>
+      <td>${t.payout>0?'<span class="hit">◎的中</span>':'<span class="miss">不的中</span>'}</td>
+      <td style="font-size:11px;color:var(--muted);">${esc(t.eval||"")}</td>
+    </tr>`).join("")}</tbody></table>`;
+}
+["f-ai","f-bet","f-day"].forEach(id => document.getElementById(id).addEventListener("change", renderLog));
+
+function renderLogFilters(){
+  const bets = [...new Set(DATA.transactions.map(t=>t.betType).filter(Boolean))];
+  const days = [...new Set(DATA.transactions.map(t=>t.day))].sort((a,b)=>a-b);
+  const fb = document.getElementById("f-bet"), fd = document.getElementById("f-day");
+  fb.length = 1; bets.forEach(b => fb.add(new Option(`券種：${b}`, b)));
+  fd.length = 1; days.forEach(d => fd.add(new Option(`開催日：${d}日目`, d)));
+}
+
+/* ---------- 集計（券種別・戦略別・自信度別） ---------- */
+function aggBy(keyFn, labelAll){
+  const groups = {};
+  for(const t of DATA.transactions){
+    const k = keyFn(t) || "（未分類）";
+    if(!groups[k]) groups[k] = {gpt:{s:0,p:0,n:0,h:0}, claude:{s:0,p:0,n:0,h:0}};
+    const g = groups[k][t.ai];
+    g.s += t.stake; g.p += t.payout; g.n += 1; if(t.payout>0) g.h += 1;
+  }
+  return groups;
+}
+function renderAgg(elId, keyFn, emptyMsg){
+  const el = document.getElementById(elId);
+  const groups = aggBy(keyFn);
+  const keys = Object.keys(groups);
+  if(!keys.length){ el.innerHTML = `<div class="empty" style="border:none;">${emptyMsg}</div>`; return; }
+  const maxStake = Math.max(...keys.flatMap(k => [groups[k].gpt.s, groups[k].claude.s]), 1);
+  el.innerHTML = keys.map(k => {
+    const row = ai => {
+      const g = groups[k][ai];
+      if(!g.n) return "";
+      const roi = g.s ? (g.p/g.s*100).toFixed(0) : "−";
+      const col = ai==="gpt" ? "var(--gpt)" : "var(--claude)";
+      return `<div class="agg-row">
+        <span class="nm" style="color:${col}">${ai==="gpt"?"GPT":"Claude"}</span>
+        <div class="bar"><div class="fill" style="width:${(g.s/maxStake*100).toFixed(1)}%;background:${col};opacity:.75;"></div></div>
+        <span class="meta num">投${g.s.toLocaleString("ja-JP")}／払${g.p.toLocaleString("ja-JP")}／回収${roi}%／${g.h}/${g.n}点</span>
+      </div>`;
+    };
+    return `<div style="margin-bottom:10px;"><div style="font-weight:700;font-size:13px;margin-bottom:2px;">${esc(k)}</div>${row("gpt")}${row("claude")}</div>`;
+  }).join("");
+}
+function renderConf(){
+  const el = document.getElementById("agg-conf");
+  const withConf = DATA.transactions.filter(t=>t.confidence);
+  if(!withConf.length){ el.innerHTML = `<div class="empty" style="border:none;">データが揃うと、自信度A〜D別の的中率・回収率と推定勝率の較正を表示します。</div>`; return; }
+  const order = ["A","B","C","D"];
+  const rows = [];
+  for(const ai of AIS){
+    for(const c of order){
+      const txs = withConf.filter(t=>t.ai===ai && t.confidence===c);
+      if(!txs.length) continue;
+      const s = txs.reduce((a,t)=>a+t.stake,0), p = txs.reduce((a,t)=>a+t.payout,0);
+      const h = txs.filter(t=>t.payout>0).length;
+      const est = txs.filter(t=>t.estWinProb!=null);
+      const avgEst = est.length ? (est.reduce((a,t)=>a+t.estWinProb,0)/est.length).toFixed(0)+"%" : "−";
+      rows.push(`<tr>
+        <td><span class="ai-tag ${ai}">${ai==="gpt"?"GPT":"Claude"}</span></td>
+        <td style="font-weight:700;">${c}</td>
+        <td class="num">${txs.length}</td>
+        <td class="num">${h}/${txs.length}（${(h/txs.length*100).toFixed(0)}%）</td>
+        <td class="num">${avgEst}</td>
+        <td class="num">${s?(p/s*100).toFixed(0):"−"}%</td>
+      </tr>`);
+    }
+  }
+  el.innerHTML = `<div class="tablewrap"><table class="log">
+    <thead><tr><th>AI</th><th>自信度</th><th>点数</th><th>的中（率）</th><th>平均推定勝率</th><th>回収率</th></tr></thead>
+    <tbody>${rows.join("")}</tbody></table></div>
+    <p class="note" style="margin-top:8px;">自信度が高いほど的中率・回収率が高ければ、較正が取れている証拠。逆転していれば自己評価にバイアスがある。</p>`;
+}
+
+/* ---------- Fund Letter ---------- */
+function renderLetters(){
+  const el = document.getElementById("letters");
+  const days = (DATA.days||[]).filter(d => d.letters && (d.letters.gpt || d.letters.claude)).sort((a,b)=>b.day-a.day);
+  if(!days.length){
+    el.innerHTML = `<div class="empty"><div class="big">✉️</div>Fund Letterはまだありません。各開催日の終了後、両ファンドの運用報告がここに並びます。</div>`;
+    return;
+  }
+  el.innerHTML = days.map(d => `
+    <div style="margin-bottom:14px;">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">DAY ${d.day}（${esc(d.date||"")}）</div>
+      <div class="letters">
+        ${d.letters.gpt ? `<div class="letter gpt"><div class="who">GPT Fund</div><div class="body">${esc(d.letters.gpt)}</div></div>` : ""}
+        ${d.letters.claude ? `<div class="letter claude"><div class="who">Claude Fund</div><div class="body">${esc(d.letters.claude)}</div></div>` : ""}
+      </div>
+    </div>`).join("");
+}
+
+/* ---------- 観戦記事 ---------- */
+function renderArticles(){
+  const el = document.getElementById("article-gallery");
+  const arts = (DATA.articles||[]).slice().sort((a,b)=>(b.day??0)-(a.day??0));
+  if(!arts.length){
+    el.innerHTML = `<div class="empty" style="border:none;"><div class="big">📰</div>観戦記事はまだありません。<br>GPTが作成した開催回レポート画像がここに並びます。</div>`;
+    return;
+  }
+  el.innerHTML = `<div class="article-grid">` + arts.map((a,i)=>`
+    <button class="article-card" data-idx="${i}" aria-label="記事を拡大表示：${esc(a.title||"")}">
+      <img src="${esc(a.src)}" alt="${esc(a.title||"観戦記事")}" loading="lazy"
+           onerror="this.style.display='none'; this.insertAdjacentHTML('afterend','<div style=&quot;aspect-ratio:16/11;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;&quot;>画像が見つかりません<br>(同フォルダに配置してください)</div>');">
+      <span class="cap-line">
+        <span class="d">${(a.day??0)===0?"開幕前":"DAY "+a.day}</span><span class="t">${esc(a.title||"")}</span>
+        ${a.note?`<span class="n">${esc(a.note)}</span>`:""}${a.date?`<span class="n">${esc(a.date)}</span>`:""}
+      </span>
+    </button>`).join("") + `</div>`;
+  el.querySelectorAll(".article-card").forEach(card => card.addEventListener("click", () => {
+    const a = arts[Number(card.dataset.idx)];
+    document.getElementById("lb-img").src = a.src;
+    document.getElementById("lb-cap").textContent = `${(a.day??0)===0?"開幕前":"DAY "+a.day}　${a.title||""}${a.date?"（"+a.date+"）":""}`;
+    document.getElementById("lightbox").classList.add("open");
+  }));
+}
+document.getElementById("lb-close").addEventListener("click", () => document.getElementById("lightbox").classList.remove("open"));
+document.getElementById("lightbox").addEventListener("click", e => { if(e.target.id==="lightbox") e.currentTarget.classList.remove("open"); });
+document.addEventListener("keydown", e => { if(e.key==="Escape") document.getElementById("lightbox").classList.remove("open"); });
+
+document.getElementById("art-add-btn").addEventListener("click", () => {
+  const msg = document.getElementById("art-msg");
+  const fname = document.getElementById("art-file").value.trim();
+  const title = document.getElementById("art-title").value.trim();
+  const day = Number(document.getElementById("art-day").value || 0);
+  if(!fname){ msg.style.color="var(--claude)"; msg.textContent="画像のファイル名を入力してください（例：day1.png）。"; return; }
+  if(!DATA.articles) DATA.articles = [];
+  DATA.articles.push({ day, date:"", title: title || fname, src: fname, note:"" });
+  renderArticles();
+  msg.style.color = "var(--gpt)";
+  msg.textContent = `追加しました。画像「${fname}」をこのHTMLと同じフォルダに置き、恒久保存は「現在のデータをJSONで表示」→ FUND_DATAブロックへ。`;
+});
+
+/* ---------- タブ切替 ---------- */
+document.querySelectorAll("nav.tabbar button").forEach(btn => btn.addEventListener("click", () => {
+  document.querySelectorAll("nav.tabbar button").forEach(b=>b.classList.remove("on"));
+  document.querySelectorAll(".tab-page").forEach(p=>p.classList.remove("active"));
+  btn.classList.add("on");
+  document.getElementById(btn.dataset.page).classList.add("active");
+  window.scrollTo({top:0});
+}));
+
+/* ---------- データ更新 ---------- */
+document.getElementById("apply").addEventListener("click", () => {
+  const msg = document.getElementById("msg");
+  try{
+    const j = JSON.parse(document.getElementById("paste").value);
+    if(!j.meta || !j.funds) throw new Error("meta / funds がありません");
+    DATA = j;
+    renderAll();
+    msg.style.color = "var(--gpt)";
+    msg.textContent = "反映しました（この画面のみ。恒久保存はファイル内のFUND_DATAブロックを差し替えて保存）。";
+  }catch(e){
+    msg.style.color = "var(--claude)";
+    msg.textContent = "JSONの解析に失敗：" + e.message;
+  }
+});
+document.getElementById("show-current").addEventListener("click", () => {
+  document.getElementById("paste").value = JSON.stringify(DATA, null, 2);
+  const msg = document.getElementById("msg");
+  msg.style.color = "var(--muted)";
+  msg.textContent = "現在表示中のデータをJSONで出力しました。これをベースにGPTが次回分を生成できます。";
+});
+document.getElementById("schema-guide").textContent = SCHEMA_GUIDE;
+
+/* ---------- 一括描画 ---------- */
+function renderAll(){
+  renderHeader(); renderCourse(); renderFundCards(); renderChart();
+  renderDayCards(); renderLogFilters(); renderLog();
+  renderAgg("agg-bet", t=>t.betType, "券種別成績は最初の取引後に自動集計されます。");
+  renderAgg("agg-strategy", t=>t.strategy, "戦略別成績は最初の取引後に自動集計されます。");
+  renderConf(); renderLetters(); renderArticles();
+}
+
+/* ---------- 起動：外部JSON（fund_data.json）優先で読み込み ---------- */
+const srcEl = () => document.getElementById("h-source");
+async function init(){
+  try{
+    const res = await fetch("./fund_data.json?t=" + Date.now(), {cache:"no-store"});
+    if(!res.ok) throw new Error("HTTP " + res.status);
+    const j = await res.json();
+    if(!j.meta || !j.funds) throw new Error("形式不正");
+    DATA = j;
+    srcEl().textContent = "fund_data.json（同期）";
+    srcEl().style.color = "var(--gpt)";
+  }catch(e){
+    // ローカルでファイルを直接開いた場合など。内蔵データで表示を継続する。
+    srcEl().textContent = "内蔵データ（オフライン表示）";
+    srcEl().style.color = "var(--muted)";
+  }
+  renderAll();
+}
+init();
+</script>
+</body>
+</html>
