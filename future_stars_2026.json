@@ -1,13 +1,208 @@
 {
   "meta": {
     "version": "1.0",
-    "phase": "monitoring",
+    "phase": "watchlist",
     "lastUpdated": "2026-07-17",
     "lockDeadline": "2026-12-12T12:00:00+09:00",
     "generation": 2026,
-    "note": "シーズン開始前。第1次ウォッチリスト提出待ち。"
+    "note": "第1次ウォッチリスト登録済み。両AI延べ12頭、重複を除く監視対象は10頭。次回監視予定は2026年7月24日。"
   },
-  "watchlists": [],
+  "watchlists": [
+    {
+      "stage": "watchlist1",
+      "submittedAt": "2026-07-17",
+      "ai": "claude",
+      "candidates": [
+        {
+          "rank": 1,
+          "sex": "colt",
+          "name": "ショウナンガレオン",
+          "sire": "Flightline",
+          "dam": "タングリトナ",
+          "damSire": null,
+          "trainer": "加藤士津八",
+          "debuted": true,
+          "record": "2026-07-05 函館芝1800m新馬1着（2歳コースレコード1:47.6、2着に2馬身半差）",
+          "reason": "函館芝1800mの新馬戦を2歳コースレコードで勝利。現時点の実戦内容と時計を高く評価。",
+          "concern": null,
+          "source": null,
+          "changedFrom": null
+        },
+        {
+          "rank": 2,
+          "sex": "colt",
+          "name": "エルドボルグ",
+          "sire": "キタサンブラック",
+          "dam": "コンサートホール",
+          "damSire": null,
+          "trainer": null,
+          "debuted": true,
+          "record": "2026-07-12 小倉芝1800m新馬1着（アタマ差）",
+          "reason": "キタサンブラック産駒で、母は愛G3勝ち馬。小倉芝1800mの初戦を勝ち切った点を評価。",
+          "concern": null,
+          "source": null,
+          "changedFrom": null
+        },
+        {
+          "rank": 3,
+          "sex": "colt",
+          "name": "ダノンダックス",
+          "sire": "サートゥルナーリア",
+          "dam": null,
+          "damSire": null,
+          "trainer": null,
+          "debuted": false,
+          "record": "未出走。2026-07-26 新潟芝1600mデビュー予定",
+          "reason": "リバティアイランドの半弟という血統背景と、直近にデビュー予定がある未出走候補として注目。",
+          "concern": null,
+          "source": "Future Stars 2026公式台帳（2026-07-17時点のデビュー予定・血統情報）",
+          "changedFrom": null
+        },
+        {
+          "rank": 1,
+          "sex": "filly",
+          "name": "ジーティーマイカ",
+          "sire": "シスキン",
+          "dam": null,
+          "damSire": null,
+          "trainer": null,
+          "debuted": true,
+          "record": "2026-06-28 福島芝1200m新馬1着（2歳コースレコードタイ、7馬身差）",
+          "reason": "コースレコードタイで7馬身差をつけた初戦のスピード性能を高く評価。",
+          "concern": null,
+          "source": null,
+          "changedFrom": null
+        },
+        {
+          "rank": 2,
+          "sex": "filly",
+          "name": "フランソワーズ",
+          "sire": "エフフォーリア",
+          "dam": null,
+          "damSire": null,
+          "trainer": null,
+          "debuted": true,
+          "record": "2026-07-11 小倉芝1800m新馬1着（逃げ切り）",
+          "reason": "エフフォーリア産駒で、芝1800mの初戦を逃げ切って勝利した中距離適性を評価。",
+          "concern": null,
+          "source": null,
+          "changedFrom": null
+        },
+        {
+          "rank": 3,
+          "sex": "filly",
+          "name": "リサナウト",
+          "sire": "リオンディーズ",
+          "dam": "グルヴェイグ",
+          "damSire": "ディープインパクト",
+          "trainer": null,
+          "debuted": true,
+          "record": "2026-07-12 福島芝1800m新馬1着（2着に3馬身半差）",
+          "reason": "福島芝1800mの新馬戦を3馬身半差で勝利。エアグルーヴにつながる母系も評価。",
+          "concern": null,
+          "source": null,
+          "changedFrom": null
+        }
+      ]
+    },
+    {
+      "stage": "watchlist1",
+      "submittedAt": "2026-07-17",
+      "ai": "gpt",
+      "candidates": [
+        {
+          "rank": 1,
+          "sex": "colt",
+          "name": "ショウナンガレオン",
+          "sire": "Flightline",
+          "dam": "タングリトナ",
+          "damSire": null,
+          "trainer": "加藤士津八",
+          "debuted": true,
+          "record": "2026-07-05 函館芝1800m新馬1着（2歳コースレコード1:47.6、2着に2馬身半差）",
+          "reason": "好位で折り合い、直線で余力を残して抜け出した内容と速い時計を評価。現時点で最もクラシック候補らしい牡馬。",
+          "concern": "5頭立てで相手関係が未確定。Flightline産駒の日本芝2400m適性と高速馬場による時計の押し上げは要確認。",
+          "source": null,
+          "changedFrom": null
+        },
+        {
+          "rank": 2,
+          "sex": "colt",
+          "name": "エスクアドラ",
+          "sire": "レイデオロ",
+          "dam": "ジューヌエコール",
+          "damSire": "クロフネ",
+          "trainer": "鹿戸雄一",
+          "debuted": true,
+          "record": "2026-07-05 福島芝2000m新馬1着（16頭立て、後方から進出して差し切り）",
+          "reason": "多頭数の2000mで位置を上げながら長く脚を使い、幼さを残して勝ち切った点と成長余地を評価。",
+          "concern": "時計と着差は突出せず相手関係の裏付けが必要。母系が短距離・マイル寄りで2400m適性は今後の確認事項。",
+          "source": null,
+          "changedFrom": null
+        },
+        {
+          "rank": 3,
+          "sex": "colt",
+          "name": "キングリア",
+          "sire": "エピファネイア",
+          "dam": "リアアメリア",
+          "damSire": "ディープインパクト",
+          "trainer": "中内田充正",
+          "debuted": false,
+          "record": "未出走。秋頃のデビューを視野に調整",
+          "reason": "母リアアメリアと父エピファネイアのクラシック血統、厩舎・育成環境を総合評価した未出走最上位候補。",
+          "concern": "実戦証拠がなく、前向きさと力みを抑える教育段階。気性・折り合いと評判先行のリスクを確認する必要がある。",
+          "source": "シルク・ホースクラブの春時点の育成リポート",
+          "changedFrom": null
+        },
+        {
+          "rank": 1,
+          "sex": "filly",
+          "name": "リサナウト",
+          "sire": "リオンディーズ",
+          "dam": "グルヴェイグ",
+          "damSire": "ディープインパクト",
+          "trainer": null,
+          "debuted": true,
+          "record": "2026-07-12 福島芝1800m新馬1着（稍重16頭立て、2着に3馬身半差）",
+          "reason": "多頭数・稍重・1800mで位置取り、折り合い、抜け出す脚を示した完成度と牝馬クラシックにつながる母系を評価。",
+          "concern": "福島で好位を取れた展開利の可能性。広いコースの速い上がり勝負、馬体維持と成長が課題。",
+          "source": null,
+          "changedFrom": null
+        },
+        {
+          "rank": 2,
+          "sex": "filly",
+          "name": "シックパラソル",
+          "sire": "エピファネイア",
+          "dam": "アンブレラデート",
+          "damSire": "エイシンフラッシュ",
+          "trainer": null,
+          "debuted": true,
+          "record": "2026-07-12 小倉芝2000m新馬2着（エルドボルグにアタマ差）",
+          "reason": "初戦から2000mを牡馬相手に先行して最後まで競り合った内容と、祖母ダイワスカーレットの母系を評価。",
+          "concern": "緩い流れで鋭い決め手は未証明。強い相手への惜敗か、新馬戦上位集団の一頭かは次走で判断が必要。",
+          "source": null,
+          "changedFrom": null
+        },
+        {
+          "rank": 3,
+          "sex": "filly",
+          "name": "エターナルバラード",
+          "sire": "ロードカナロア",
+          "dam": "バラーディスト",
+          "damSire": "ハーツクライ",
+          "trainer": "武幸四郎",
+          "debuted": false,
+          "record": "未出走",
+          "reason": "ロードカナロアのスピードと母父ハーツクライの持続力・成長力を評価。中距離まで伸びる余地がある未出走候補。",
+          "concern": "実戦経験がなく距離適性は推測段階。マイル寄りに出る可能性があり、デビュー戦の折り合いと末脚を確認したい。",
+          "source": "育成段階のリポート・評価（動きのリズムと奥行き、1600～2000m想定）",
+          "changedFrom": null
+        }
+      ]
+    }
+  ],
   "prospects": [],
   "runs": [],
   "directMatches": [],
@@ -15,8 +210,14 @@
     "scoredStages": [],
     "results": [],
     "standings": {
-      "gpt": { "scoredItems": 0, "avgScore": null },
-      "claude": { "scoredItems": 0, "avgScore": null }
+      "gpt": {
+        "scoredItems": 0,
+        "avgScore": null
+      },
+      "claude": {
+        "scoredItems": 0,
+        "avgScore": null
+      }
     }
   },
   "articles": []
