@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "version": "1.0",
+    "phase": "monitoring",
+    "lastUpdated": "2026-07-17",
+    "lockDeadline": "2026-12-12T12:00:00+09:00",
+    "generation": 2026,
+    "note": "シーズン開始前。第1次ウォッチリスト提出待ち。"
+  },
+  "watchlists": [],
+  "prospects": [],
+  "runs": [],
+  "directMatches": [],
+  "brier": {
+    "scoredStages": [],
+    "results": [],
+    "standings": {
+      "gpt": { "scoredItems": 0, "avgScore": null },
+      "claude": { "scoredItems": 0, "avgScore": null }
+    }
+  },
+  "articles": []
+}

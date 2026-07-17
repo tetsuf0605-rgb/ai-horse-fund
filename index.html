@@ -218,6 +218,60 @@
     background:#0c110e; border:1px solid var(--line); border-radius:8px; padding:12px;
     overflow-x:auto; font-size:11.5px; margin-top:8px; line-height:1.5;
   }
+
+  /* ===== Future Stars ===== */
+  .fs-strip{display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px; margin-bottom:18px;
+    background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:12px 16px;}
+  .fs-phase{font-size:13px; font-weight:800; color:#101512; background:var(--amber); border-radius:14px; padding:3px 14px; letter-spacing:.05em;}
+  .fs-steps{display:flex; align-items:center; gap:6px; font-size:11px; color:var(--muted); flex-wrap:wrap;}
+  .fs-steps .st{padding:2px 9px; border:1px solid var(--line); border-radius:12px; background:var(--panel2);}
+  .fs-steps .st.done{color:var(--text); border-color:var(--muted);}
+  .fs-steps .st.now{color:var(--amber); border-color:var(--amber); font-weight:700;}
+  .fs-steps .ar{opacity:.5;}
+  .fs-lock{margin-left:auto; font-size:12px; color:var(--muted);}
+  .fs-lock b{color:var(--amber);}
+  .fs-src{width:100%; font-size:11px; color:var(--muted);}
+
+  .prospect-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media(max-width:720px){ .prospect-grid{grid-template-columns:1fr;} }
+  .pcard{border:1px solid var(--line); border-radius:10px; background:var(--panel); overflow:hidden;}
+  .pcard .head{display:flex; align-items:center; gap:8px; padding:11px 14px; border-bottom:1px solid var(--line); flex-wrap:wrap;}
+  .pcard .hname{font-size:17px; font-weight:800;}
+  .pcard.gpt .hname{color:var(--gpt);} .pcard.claude .hname{color:var(--claude);}
+  .sex-tag{font-size:10.5px; font-weight:700; border-radius:10px; padding:1px 8px; border:1px solid var(--line); color:var(--muted); background:var(--panel2);}
+  .stat-tag{font-size:10.5px; font-weight:700; border-radius:10px; padding:1px 8px; background:var(--panel2); border:1px solid var(--line); color:var(--minus);}
+  .pcard .blood{width:100%; font-size:11px; color:var(--muted);}
+  .pcard .sp{display:flex; align-items:baseline; justify-content:center; gap:8px; padding:12px; background:var(--panel2); border-bottom:1px solid var(--line);}
+  .pcard .sp .v{font-size:30px; font-weight:800; color:var(--amber);}
+  .pcard .sp .k{font-size:10.5px; color:var(--muted); letter-spacing:.15em;}
+  .pcard .meta-line{display:flex; flex-wrap:wrap; gap:6px 14px; padding:9px 14px; font-size:11.5px; color:var(--muted); border-bottom:1px solid var(--line);}
+  .pcard .meta-line b{color:var(--text);}
+  .pred-grid{display:grid; grid-template-columns:repeat(3,1fr);}
+  .pred{padding:8px 6px; text-align:center; border-top:1px solid var(--line);}
+  .pred:nth-child(-n+3){border-top:none;}
+  .pred .k{font-size:9.5px; color:var(--muted);}
+  .pred .v{font-size:14px; font-weight:700;}
+  .pcard details{border-top:1px solid var(--line); font-size:12px;}
+  .pcard details summary{cursor:pointer; padding:9px 14px; color:var(--amber); font-weight:700; list-style:none;}
+  .pcard details summary::-webkit-details-marker{display:none;}
+  .pcard details .body{padding:0 14px 12px; color:var(--text);}
+  .pcard details .body dt{color:var(--muted); font-size:11px; margin-top:7px;}
+
+  .wl-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media(max-width:720px){ .wl-grid{grid-template-columns:1fr;} }
+  .wl-col .who{font-weight:800; font-size:14px; margin-bottom:8px;}
+  .wl-col.gpt .who{color:var(--gpt);} .wl-col.claude .who{color:var(--claude);}
+  .wl-item{border:1px solid var(--line); border-radius:8px; background:var(--panel); padding:9px 12px; margin-bottom:8px; font-size:12.5px;}
+  .wl-item .nm{font-weight:800; font-size:13.5px;}
+  .wl-item .sub{color:var(--muted); font-size:11px; margin-top:2px;}
+  .wl-item .rsn{margin-top:5px;}
+  .wl-item .debut-no{color:var(--focus);}
+
+  .dm-card{border:1px solid var(--line); border-radius:10px; background:var(--panel); padding:12px 14px; margin-bottom:10px; font-size:13px;}
+  .dm-card .race{font-weight:800; color:var(--amber);}
+  .dm-vs{display:flex; flex-wrap:wrap; gap:6px 14px; margin-top:6px; font-size:12.5px;}
+  .h2h-total{display:flex; align-items:center; justify-content:center; gap:14px; padding:14px; font-size:15px; font-weight:800;}
+  .h2h-total .n{font-size:30px;}
 </style>
 </head>
 <body>
@@ -330,6 +384,45 @@
 </section>
 </div><!-- /page-media -->
 
+<div class="tab-page" id="page-fs">
+<!-- Future Stars ステータス -->
+<section>
+  <h2>FUTURE STARS 2026 ─ 2歳馬指名ドラフト</h2>
+  <div id="fs-strip"></div>
+  <div id="fs-main"></div>
+</section>
+
+<!-- Career Star Point -->
+<section id="fs-sec-star" style="display:none;">
+  <h2>CAREER STAR POINT ─ 生涯ポイント</h2>
+  <div class="panel" id="fs-star"></div>
+</section>
+
+<!-- Direct Match -->
+<section id="fs-sec-dm" style="display:none;">
+  <h2>DIRECT MATCH ─ 指名馬直接対決</h2>
+  <div id="fs-dm"></div>
+</section>
+
+<!-- Brier Score -->
+<section id="fs-sec-brier" style="display:none;">
+  <h2>BRIER SCORE ─ 予測較正（低いほど優秀）</h2>
+  <div class="panel" id="fs-brier"></div>
+</section>
+
+<!-- 出走ログ -->
+<section id="fs-sec-runs" style="display:none;">
+  <h2>RUN LOG ─ 出走ログ</h2>
+  <div class="panel"><div class="tablewrap" id="fs-runs"></div></div>
+</section>
+
+<!-- Future Stars 観戦記事 -->
+<section>
+  <h2>FS REPORTS ─ 観戦記事</h2>
+  <div class="panel"><div id="fs-articles"></div></div>
+</section>
+</div><!-- /page-fs -->
+
 <div class="tab-page" id="page-data">
 <!-- データ更新 -->
 <section>
@@ -359,6 +452,7 @@
   <button data-page="page-days"><span class="ico">🏇</span>対戦</button>
   <button data-page="page-log"><span class="ico">📒</span>ログ</button>
   <button data-page="page-media"><span class="ico">📰</span>記事</button>
+  <button data-page="page-fs"><span class="ico">⭐</span>新星</button>
   <button data-page="page-data"><span class="ico">⚙️</span>データ</button>
 </nav>
 
@@ -907,7 +1001,326 @@ async function init(){
   }
   renderAll();
 }
+
+/* ============================================================
+   Future Stars 2026（future_stars_2026.json ・本編とは独立）
+   正本＝Claude公式台帳。本タブは表示専用で再計算しない。
+   読み込み失敗時も本編タブには一切影響しない（フェイルセーフ）。
+   ============================================================ */
+let FS = null;
+const FS_PHASES = [
+  {key:"monitoring", label:"監視中",       step:"監視"},
+  {key:"watchlist",  label:"ウォッチリスト", step:"WL"},
+  {key:"shortlist",  label:"ショートリスト", step:"SL"},
+  {key:"locked",     label:"指名確定",     step:"指名"},
+  {key:"tracking",   label:"追跡中",       step:"追跡"},
+  {key:"finished",   label:"完了",         step:"完了"}
+];
+const FS_RESULT_LABEL = {finished:null, dnf:"中止", disqualified:"失格", scratched:"取消", excluded:"除外"};
+const FS_PRED_LABEL = {
+  g1TwoYoRun:"2歳GⅠ出走", g1TwoYoTop3:"2歳GⅠ3着内",
+  classicRun:"指定CL出走", classicTop3:"指定CL3着内",
+  careerGradedWin:"生涯重賞勝利", careerG1Win:"生涯GⅠ勝利"
+};
+const fsAiOf = pid => String(pid||"").startsWith("gpt") ? "gpt" : "claude";
+const fsProspect = pid => (FS.prospects||[]).find(p => p.id === pid);
+const fsName = pid => { const p = fsProspect(pid); return p ? p.name : pid; };
+const fsPct = v => (v==null || isNaN(v)) ? "−" : (v*100).toFixed(0) + "%";
+const fsSexLabel = s => s === "colt" ? "牡" : s === "filly" ? "牝" : "";
+
+function fsFinishText(r){
+  const lbl = FS_RESULT_LABEL[r.resultStatus || "finished"];
+  if(lbl) return `<span style="color:var(--minus);font-weight:700;">${lbl}</span>`;
+  if(r.finish == null) return "−";
+  return `<span class="num" style="font-weight:700;${r.finish<=3?"color:var(--amber);":""}">${r.finish}着</span>`;
+}
+
+function renderFS(){
+  const strip = document.getElementById("fs-strip");
+  const main = document.getElementById("fs-main");
+  const secs = ["fs-sec-star","fs-sec-dm","fs-sec-brier","fs-sec-runs"];
+  const show = (id,on) => document.getElementById(id).style.display = on ? "" : "none";
+
+  if(!FS){
+    strip.innerHTML = "";
+    secs.forEach(s => show(s,false));
+    main.innerHTML = `<div class="empty"><div class="big">⭐</div>Future Starsデータ準備中<br>
+      <span class="note">future_stars_2026.json が読み込めません。リポジトリに配置されると、ここに2歳馬ドラフトの記録が表示されます（本編の表示には影響しません）。</span></div>`;
+    renderFSArticles();
+    return;
+  }
+
+  /* ---- ステータスストリップ ---- */
+  const phase = FS.meta.phase || "monitoring";
+  const idx = Math.max(0, FS_PHASES.findIndex(p => p.key === phase));
+  const steps = FS_PHASES.slice(0,5).map((p,i) => {
+    const cls = i < idx ? "done" : i === idx ? "now" : "";
+    return `<span class="st ${cls}">${p.step}</span>`;
+  }).join('<span class="ar">›</span>');
+  let lock = "";
+  if(["monitoring","watchlist","shortlist"].includes(phase) && FS.meta.lockDeadline){
+    const days = Math.ceil((new Date(FS.meta.lockDeadline) - Date.now()) / 86400000);
+    if(!isNaN(days)) lock = `<span class="fs-lock">最終ロックまで <b class="num">${Math.max(days,0)}</b> 日（12/12 12:00）</span>`;
+  }
+  strip.innerHTML = `<div class="fs-strip">
+    <span class="fs-phase">${(FS_PHASES[idx]||{}).label || phase}</span>
+    <span class="fs-steps">${steps}</span>${lock}
+    <span class="fs-src">対象：2024年生・2026年2歳世代｜各AI 牡1・牝1を指名｜正本：Claude管理のFuture Stars公式台帳${FS.meta.lastUpdated?`｜更新 ${esc(FS.meta.lastUpdated)}`:""}</span>
+  </div>`;
+
+  /* ---- メイン（フェーズで切替） ---- */
+  const hasProspects = (FS.prospects||[]).length > 0;
+  const hasWL = (FS.watchlists||[]).length > 0;
+  if(hasProspects){
+    main.innerHTML = renderFSProspects();
+  }else if(hasWL){
+    main.innerHTML = renderFSWatchlists();
+  }else{
+    main.innerHTML = `<div class="empty"><div class="big">🔭</div>候補馬を監視中 ─ 第1次ウォッチリスト提出待ち。<br>
+      <span class="note">両AIが牡馬・牝馬 各最大3頭の注目馬を発掘します（未出走の評判馬も対象）。</span></div>`;
+  }
+
+  /* ---- Star Point ---- */
+  show("fs-sec-star", hasProspects);
+  if(hasProspects) renderFSStar();
+
+  /* ---- Direct Match ---- */
+  const dms = FS.directMatches || [];
+  show("fs-sec-dm", dms.length > 0);
+  if(dms.length) renderFSDM();
+
+  /* ---- Brier ---- */
+  const scored = FS.brier && (FS.brier.scoredStages||[]).length > 0;
+  show("fs-sec-brier", !!scored);
+  if(scored) renderFSBrier();
+
+  /* ---- 出走ログ ---- */
+  const runs = FS.runs || [];
+  show("fs-sec-runs", runs.length > 0);
+  if(runs.length) renderFSRuns();
+
+  renderFSArticles();
+}
+
+/* ---- ウォッチリスト比較（最新提出＋履歴） ---- */
+function renderFSWatchlists(){
+  const wls = (FS.watchlists||[]).slice().sort((a,b)=>String(a.submittedAt).localeCompare(String(b.submittedAt)));
+  const latestOf = ai => { const l = wls.filter(w=>w.ai===ai); return l.length ? l[l.length-1] : null; };
+  const col = ai => {
+    const wl = latestOf(ai);
+    const name = ai==="gpt" ? "GPT" : "Claude";
+    if(!wl) return `<div class="wl-col ${ai}"><div class="who">${name}</div><div class="empty" style="padding:20px;">未提出</div></div>`;
+    const items = (wl.candidates||[]).slice().sort((a,b)=>(a.sex===b.sex?0:a.sex==="colt"?-1:1)||(a.rank-b.rank)).map(c => `
+      <div class="wl-item">
+        <span class="sex-tag">${fsSexLabel(c.sex)}${c.rank?` ${c.rank}位`:""}</span>
+        <span class="nm"> ${esc(c.name)}</span>
+        ${c.debuted===false?`<span class="sex-tag debut-no">未出走</span>`:""}
+        <div class="sub">${esc(c.sire||"")}${c.dam?` × ${esc(c.dam)}`:""}${c.trainer?`｜${esc(c.trainer)}厩舎`:""}${c.record?`｜${esc(c.record)}`:""}</div>
+        ${c.reason?`<div class="rsn">${esc(c.reason)}</div>`:""}
+        ${c.concern?`<div class="sub">懸念：${esc(c.concern)}</div>`:""}
+        ${c.debuted===false&&c.source?`<div class="sub">情報源：${esc(c.source)}</div>`:""}
+        ${c.changedFrom?`<div class="sub" style="color:var(--focus);">入替：${esc(c.changedFrom)}</div>`:""}
+      </div>`).join("");
+    return `<div class="wl-col ${ai}"><div class="who">${name}<span style="font-size:11px;color:var(--muted);font-weight:600;"> ${esc(wl.stage||"")}（${esc(wl.submittedAt||"")}）</span></div>${items}</div>`;
+  };
+  const history = wls.length > 2 ? `
+    <details class="guide" style="margin-top:12px;"><summary>提出履歴（入れ替えの記録）</summary>
+      ${wls.map(w=>`<div class="note" style="margin-top:6px;"><b style="color:var(--${w.ai})">${w.ai==="gpt"?"GPT":"Claude"}</b> ${esc(w.stage||"")}（${esc(w.submittedAt||"")}）：${(w.candidates||[]).map(c=>esc(c.name)).join("、")}</div>`).join("")}
+    </details>` : "";
+  return `<div class="wl-grid">${col("gpt")}${col("claude")}</div>${history}`;
+}
+
+/* ---- Prospect Card ---- */
+function renderFSProspects(){
+  const order = ["gpt_colt","gpt_filly","claude_colt","claude_filly"];
+  const cards = order.map(id => {
+    const p = fsProspect(id);
+    if(!p) return "";
+    const ai = p.ai || fsAiOf(id);
+    const sc = p.scouting || {}, pr = p.predictions || {}, ol = p.outlook || {};
+    const stTag = p.status && p.status !== "active"
+      ? `<span class="stat-tag">${{injured:"故障休養",transferred:"移籍",retired:"引退"}[p.status]||esc(p.status)}</span>` : "";
+    const preds = Object.keys(FS_PRED_LABEL).map(k =>
+      `<div class="pred"><div class="k">${FS_PRED_LABEL[k]}</div><div class="v num">${fsPct(pr[k])}</div></div>`).join("");
+    return `
+    <div class="pcard ${ai}">
+      <div class="head">
+        <span class="cap" style="background:var(--${ai});">${ai==="gpt"?"G":"C"}</span>
+        <span class="hname">${esc(p.name)}</span>
+        <span class="sex-tag">${fsSexLabel(p.sex)}</span>${stTag}
+        <span class="blood">父${esc(p.sire||"−")}／母${esc(p.dam||"−")}（母父${esc(p.damSire||"−")}）${p.trainer?`｜${esc(p.trainer)}厩舎`:""}</span>
+      </div>
+      <div class="sp"><span class="v num">${(p.starPoints||0)}</span><span class="k">STAR POINTS</span></div>
+      <div class="meta-line">
+        <span>指定クラシック <b>${esc(p.designatedClassic||"−")}</b></span>
+        <span>自信度 <b>${esc(sc.confidence||"−")}</b></span>
+        ${sc.distance?`<span>適性 <b>${esc(sc.distance)}</b></span>`:""}
+        ${sc.surface?`<span><b>${esc(sc.surface)}</b></span>`:""}
+        ${sc.growthType?`<span>成長 <b>${esc(sc.growthType)}</b></span>`:""}
+      </div>
+      <div class="pred-grid">${preds}</div>
+      <details><summary>スカウト評価を見る</summary><div class="body">
+        ${sc.reason?`<dt>指名理由</dt><dd>${esc(sc.reason)}</dd>`:""}
+        ${sc.bestPerformance?`<dt>最も評価した内容</dt><dd>${esc(sc.bestPerformance)}</dd>`:""}
+        ${sc.runningStyle?`<dt>脚質</dt><dd>${esc(sc.runningStyle)}</dd>`:""}
+        ${sc.risk?`<dt>リスク</dt><dd>${esc(sc.risk)}</dd>`:""}
+        ${ol.ceiling?`<dt>最も高い到達点</dt><dd>${esc(ol.ceiling)}</dd>`:""}
+        ${ol.realistic?`<dt>現実的なキャリア</dt><dd>${esc(ol.realistic)}</dd>`:""}
+        ${ol.targetRace?`<dt>期待する代表レース</dt><dd>${esc(ol.targetRace)}</dd>`:""}
+        ${p.recordAtLock?`<dt>指名時点の出走歴</dt><dd>${esc(p.recordAtLock)}</dd>`:""}
+      </div></details>
+    </div>`;
+  }).join("");
+  return `<div class="prospect-grid">${cards}</div>`;
+}
+
+/* ---- Career Star Point ランキング ---- */
+function renderFSStar(){
+  const ps = (FS.prospects||[]).slice().sort((a,b)=>(b.starPoints||0)-(a.starPoints||0));
+  const maxP = Math.max(...ps.map(p=>p.starPoints||0), 1);
+  const totals = {gpt:0, claude:0};
+  ps.forEach(p => totals[p.ai || fsAiOf(p.id)] += (p.starPoints||0));
+  const rows = ps.map((p,i) => {
+    const ai = p.ai || fsAiOf(p.id);
+    return `<div class="agg-row">
+      <span class="nm" style="color:var(--${ai})">${i+1}. ${esc(p.name)}</span>
+      <div class="bar"><div class="fill" style="width:${((p.starPoints||0)/maxP*100).toFixed(1)}%;background:var(--${ai});opacity:.75;"></div></div>
+      <span class="meta num">${p.starPoints||0} pt</span>
+    </div>`;
+  }).join("");
+  const lead = totals.gpt === totals.claude ? "" :
+    `<span style="color:var(--${totals.gpt>totals.claude?"gpt":"claude"});">★ ${totals.gpt>totals.claude?"GPT":"Claude"}リード</span>`;
+  document.getElementById("fs-star").innerHTML = rows + `
+    <div style="display:flex;justify-content:space-between;padding-top:10px;font-size:13px;font-weight:800;">
+      <span style="color:var(--gpt)">GPT合計 <span class="num">${totals.gpt}</span> pt</span>
+      ${lead}
+      <span style="color:var(--claude)">Claude合計 <span class="num">${totals.claude}</span> pt</span>
+    </div>
+    <p class="note" style="margin-top:6px;">ポイントはClaude公式台帳の確定値（1レース＝最上位区分のみ加算・クラシックボーナス込み）。</p>`;
+}
+
+/* ---- Direct Match ---- */
+function renderFSDM(){
+  const dms = (FS.directMatches||[]).slice().sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+  const tot = {gpt:0, claude:0, draw:0};
+  for(const dm of dms) for(const h of (dm.headToHead||[])){
+    if(!h.counts) continue;
+    if(h.winner === "draw") tot.draw++;
+    else if(h.winner && h.winner !== "nocontest") tot[fsAiOf(h.winner)]++;
+  }
+  const cards = dms.map(dm => {
+    const entries = (dm.entries||[]).slice().sort((a,b)=>(a.finish??99)-(b.finish??99)).map(e => {
+      const ai = fsAiOf(e.prospectId);
+      return `<span><span class="ai-tag ${ai}">${ai==="gpt"?"G":"C"}</span> ${esc(fsName(e.prospectId))} ${fsFinishText(e)}</span>`;
+    }).join("");
+    return `<div class="dm-card">
+      <span class="race">${esc(dm.raceName||"")}</span><span style="color:var(--muted);font-size:12px;"> ${esc(dm.grade||"")}｜${esc(dm.date||"")}</span>
+      <div class="dm-vs">${entries}</div>
+      ${dm.review?`<div class="cmt" style="margin-top:8px;">${esc(dm.review)}</div>`:""}
+    </div>`;
+  }).join("");
+  document.getElementById("fs-dm").innerHTML = `
+    <div class="panel" style="margin-bottom:10px;">
+      <div class="h2h-total">
+        <span style="color:var(--gpt)">GPT <span class="n num">${tot.gpt}</span></span>
+        <span style="color:var(--muted);font-size:12px;">勝 ─ ${tot.draw}分 ─ 勝</span>
+        <span style="color:var(--claude)"><span class="n num">${tot.claude}</span> Claude</span>
+      </div>
+      <p class="note" style="text-align:center;">通算は公式着順基準・GPT対Claudeのペアのみ集計（同一AI所属馬同士は除外）</p>
+    </div>${cards}`;
+}
+
+/* ---- Brier Score ---- */
+function renderFSBrier(){
+  const b = FS.brier || {};
+  const st = b.standings || {};
+  const fmt = s => (s==null || isNaN(s)) ? "−" : Number(s).toFixed(3);
+  const g = st.gpt||{}, c = st.claude||{};
+  let leader = "";
+  if(g.avgScore!=null && c.avgScore!=null && g.avgScore!==c.avgScore)
+    leader = `<p class="note" style="text-align:center;">現在の予測王：<b style="color:var(--${g.avgScore<c.avgScore?"gpt":"claude"})">${g.avgScore<c.avgScore?"GPT":"Claude"}</b>（平均スコアが低い＝予測が正確）</p>`;
+  const rows = (b.results||[]).map(r => `<tr>
+    <td><span class="ai-tag ${fsAiOf(r.prospectId)}">${fsAiOf(r.prospectId)==="gpt"?"GPT":"Claude"}</span></td>
+    <td>${esc(fsName(r.prospectId))}</td>
+    <td>${FS_PRED_LABEL[r.item]||esc(r.item)}</td>
+    <td class="num">${fsPct(r.predicted)}</td>
+    <td class="num">${r.actual===1?"○":r.actual===0?"×":"−"}</td>
+    <td class="num">${fmt(r.score)}</td>
+  </tr>`).join("");
+  document.getElementById("fs-brier").innerHTML = `
+    <div class="h2h-total">
+      <span style="color:var(--gpt)">GPT <span class="n num">${fmt(g.avgScore)}</span></span>
+      <span style="color:var(--muted);font-size:12px;">平均Brier（${g.scoredItems||0}／${c.scoredItems||0}項目確定）</span>
+      <span style="color:var(--claude)"><span class="n num">${fmt(c.avgScore)}</span> Claude</span>
+    </div>${leader}
+    ${rows?`<div class="tablewrap" style="margin-top:8px;"><table class="log">
+      <thead><tr><th>AI</th><th>馬</th><th>予測項目</th><th>予測</th><th>結果</th><th>スコア</th></tr></thead>
+      <tbody>${rows}</tbody></table></div>`:""}
+    <p class="note" style="margin-top:8px;">Brier ＝（予測確率 − 実結果）²。段階採点：2歳GⅠ → 指定クラシック → 生涯成績（引退時に最終確定）。</p>`;
+}
+
+/* ---- 出走ログ ---- */
+function renderFSRuns(){
+  const runs = (FS.runs||[]).slice().sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+  document.getElementById("fs-runs").innerHTML = `<table class="log">
+    <thead><tr><th>日付</th><th>馬</th><th>レース</th><th>格</th><th>着順</th><th>人気</th><th>SP</th><th>短評</th></tr></thead>
+    <tbody>${runs.map(r => {
+      const ai = fsAiOf(r.prospectId);
+      const tr = r.trend==="up"?'<span style="color:var(--gpt);">↑</span>':r.trend==="down"?'<span style="color:var(--minus);">↓</span>':"";
+      return `<tr>
+        <td class="num">${esc(r.date||"")}</td>
+        <td><span class="ai-tag ${ai}">${ai==="gpt"?"G":"C"}</span> ${esc(fsName(r.prospectId))}</td>
+        <td>${esc(r.track||"")} ${esc(r.raceName||"")}<span style="color:var(--muted);font-size:11px;"> ${esc(r.surface||"")}${r.distance||""}${r.distance?"m":""}</span></td>
+        <td>${esc(r.grade||"−")}</td>
+        <td>${fsFinishText(r)}${r.fieldSize?`<span style="color:var(--muted);font-size:10px;">/${r.fieldSize}</span>`:""}</td>
+        <td class="num">${r.popularity??"−"}</td>
+        <td class="num">${r.starPointsEarned?`+${r.starPointsEarned}`:"−"}</td>
+        <td style="font-size:11px;">${tr} ${esc(r.review||"")}</td>
+      </tr>`;
+    }).join("")}</tbody></table>`;
+}
+
+/* ---- FS観戦記事（本編ライトボックスを共用） ---- */
+function renderFSArticles(){
+  const el = document.getElementById("fs-articles");
+  const arts = FS ? (FS.articles||[]).slice().sort((a,b)=>String(b.date||"").localeCompare(String(a.date||""))) : [];
+  if(!arts.length){
+    el.innerHTML = `<div class="empty" style="border:none;"><div class="big">📰</div>Future Stars観戦記事はまだありません。<br><span class="note">fs_watchlist1.png などの画像がここに並びます（HTMLと同フォルダに配置）。</span></div>`;
+    return;
+  }
+  el.innerHTML = `<div class="article-grid">` + arts.map((a,i)=>`
+    <button class="article-card" data-idx="${i}" aria-label="記事を拡大表示：${esc(a.title||"")}">
+      <img src="${esc(a.src)}" alt="${esc(a.title||"FS観戦記事")}" loading="lazy"
+           onerror="this.style.display='none'; this.insertAdjacentHTML('afterend','<div style=&quot;aspect-ratio:16/11;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;&quot;>画像が見つかりません<br>(同フォルダに配置してください)</div>');">
+      <span class="cap-line">
+        <span class="d">FS</span><span class="t">${esc(a.title||"")}</span>
+        ${a.date?`<span class="n">${esc(a.date)}</span>`:""}
+      </span>
+    </button>`).join("") + `</div>`;
+  el.querySelectorAll(".article-card").forEach(card => card.addEventListener("click", () => {
+    const a = arts[Number(card.dataset.idx)];
+    document.getElementById("lb-img").src = a.src;
+    document.getElementById("lb-cap").textContent = `Future Stars　${a.title||""}${a.date?"（"+a.date+"）":""}`;
+    document.getElementById("lightbox").classList.add("open");
+  }));
+}
+
+/* ---- 起動：future_stars_2026.json（失敗しても本編に影響しない） ---- */
+async function loadFS(){
+  try{
+    const res = await fetch("./future_stars_2026.json?t=" + Date.now(), {cache:"no-store"});
+    if(!res.ok) throw new Error("HTTP " + res.status);
+    const j = await res.json();
+    if(!j.meta) throw new Error("形式不正");
+    FS = j;
+  }catch(e){
+    FS = null; // フェイルセーフ：準備中表示のみ
+  }
+  try{ renderFS(); }catch(e){ /* FSタブの描画エラーも本編へ波及させない */ }
+}
+
 init();
+loadFS();
 </script>
 </body>
 </html>
