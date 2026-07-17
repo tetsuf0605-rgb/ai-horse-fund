@@ -220,5 +220,13 @@
       }
     }
   },
-  "articles": []
+  "articles": [
+    {
+    "id": "fs-watchlist-2026-01",
+    "date": "2026-07-17",
+    "title": "GPT・Claude 第1次ウォッチリスト",
+    "src": "fs_watchlist1.png",
+    "note": "Future Stars 2026の第1次ウォッチリスト。両AIの候補馬と重複候補、週次監視対象を掲載。"
+  }
+  ]
 }
