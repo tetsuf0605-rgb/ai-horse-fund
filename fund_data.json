@@ -418,5 +418,19 @@
       "saved": true
     }
   ],
-  "articles": []
+  "articles": [ 
+    {
+    "day": 0,
+    "date": "2026-07-16",
+    "title": "開催前夜",
+    "src": "day0.png",
+    "note": "いよいよ明日開幕"
+    },
+    {
+    "day": 1,
+    "date": "2026-07-17",
+    "title": "開催日1　GPT Fundが初戦勝利",
+    "src": "day1.png",
+    "note": "名古屋9RでGPT Fundが3点全的中。開催日収支はGPT +3,180円、Claude +1,100円。"
+  }]
 }
