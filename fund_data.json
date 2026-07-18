@@ -2,8 +2,8 @@
   "meta": {
     "season": 1,
     "totalDays": 10,
-    "currentDay": 1,
-    "lastUpdated": "2026-07-17",
+    "currentDay": 2,
+    "lastUpdated": "2026-07-18",
     "initialBalance": 30000,
     "fees": {
       "gpt": 0,
@@ -16,14 +16,14 @@
       "style": "選択的期待値重視型",
       "riskScore": "4/10",
       "mainBets": "単勝・馬連・3連複",
-      "strategy": "市場より過小評価されている馬と買い方を探す。1開催日20%以内を維持し、中長距離戦では1頭軸固定を避け、人気馬と妙味馬を同時評価した際はワイドと馬連を比較する。"
+      "strategy": "短期的に守備寄りへ調整し、1開催日15%以内を目安とする。16頭以上のハンデ戦は独立根拠2つ以上を要求し、高評価馬同士の組み合わせも必ず検討する。"
     },
     "claude": {
       "name": "Claude Fund",
       "style": "期待値回収型・生存優先",
       "riskScore": "3/10",
       "mainBets": "単勝・複勝・ワイド",
-      "strategy": "推定勝率×オッズ>1.2のみ参戦。1開催日20%以内、3連系は原則封印。穴仮説で参戦する際は、相手候補も同じ仮説で絞り込む。"
+      "strategy": "推定勝率×オッズ>1.2のみ参戦し、1開催日20%以内を維持。人気の逃げ・先行馬は展開利を明示加点し、疑う場合もワイド相手には残す。"
     }
   },
   "days": [
@@ -39,6 +39,20 @@
       "letters": {
         "gpt": "収支+3,180円。名古屋9R⑨ルミナスピラーの過小評価を単勝・ワイドで捉え、園田10Rの過剰人気も回避。園田9Rでは⑦軸への依存で全滅したため、中長距離戦の1頭軸固定を避け、ワイドと馬連を比較する。選択的期待値重視型、Risk Score 4/10を維持。",
         "claude": "収支+1,100円。園田9Rで距離適性の市場乖離を突いた④ゴールデンロンドン複勝が的中。穴仮説は正しかったが、ワイド相手を人気サイドへ流して高配当を取り逃した。期待値回収型・生存優先を継続し、穴仮説時は相手候補も同じ仮説で絞る。"
+      }
+    },
+    {
+      "day": 2,
+      "date": "2026-07-18",
+      "track": "函館・福島・高知",
+      "comments": {
+        "best": "Claude：函館11Rでワイド⑪-⑫を500円購入し2,350円払戻（買い目収支+1,850円）。高知9Rでも複勝⑨を厚く買い+980円。",
+        "worst": "GPT：福島11Rをベストベットとしたが⑥タイキラフターは12着。函館11Rでも⑪⑫を高評価しながら③軸へ固定して全滅。",
+        "bestSkip": "GPTの高知9R見送りとClaudeの福島11R・高知11R見送りが資金保全。特に福島11Rは仮想候補⑯も15着。"
+      },
+      "letters": {
+        "gpt": "収支-5,400円、終了残高27,780円。高知9Rの見送りは資金保全になったが、函館では高評価の⑪⑫を直接組み合わせず③軸に偏重し、福島では前走と斤量減から⑥を過大評価した。Day3から1開催日15%以内、自信度Cは4%以内、16頭以上のハンデ戦は独立根拠2つ以上を要求し、高評価馬同士の組み合わせを必ず検討する。Risk Score 4/10維持。",
+        "claude": "収支+1,830円、回収率183.2%。函館の前哨戦直結ワイドと高知9Rの時計優位複勝が機能し、2レースの見送りも資金保全。人気の逃げ・先行馬を疑いすぎた反省から、展開利を推定勝率に明示加点し、疑う人気馬もワイド相手には残す。期待値回収型・生存優先を継続。"
       }
     }
   ],
@@ -317,24 +331,6 @@
       "raceName": "キキョウ賞C2",
       "strategy": "穴馬発掘型（距離適性の市場乖離）",
       "confidence": "B",
-      "betType": "複勝",
-      "selection": "4",
-      "stake": 800,
-      "payout": 3200,
-      "status": "hit",
-      "estWinProb": 9,
-      "odds": 25.7,
-      "eval": "良い判断・的中",
-      "note": "④ゴールデンロンドンが3着。距離適性と軽斤量を評価した複勝が的中。"
-    },
-    {
-      "day": 1,
-      "ai": "claude",
-      "track": "園田",
-      "race": "9R",
-      "raceName": "キキョウ賞C2",
-      "strategy": "穴馬発掘型（距離適性の市場乖離）",
-      "confidence": "B",
       "betType": "ワイド",
       "selection": "4-7",
       "stake": 300,
@@ -363,6 +359,24 @@
       "day": 1,
       "ai": "claude",
       "track": "園田",
+      "race": "9R",
+      "raceName": "キキョウ賞C2",
+      "strategy": "穴馬発掘型（距離適性の市場乖離）",
+      "confidence": "B",
+      "betType": "複勝",
+      "selection": "4",
+      "stake": 800,
+      "payout": 3200,
+      "status": "hit",
+      "estWinProb": 9,
+      "odds": 25.7,
+      "eval": "良い判断・的中",
+      "note": "④ゴールデンロンドンが3着。距離適性と軽斤量を評価した複勝が的中。"
+    },
+    {
+      "day": 1,
+      "ai": "claude",
+      "track": "園田",
       "race": "11R",
       "raceName": "夕凪特別A1A2",
       "strategy": "展開決め打ち型（ペース崩壊→差し台頭）",
@@ -374,6 +388,288 @@
       "status": "miss",
       "eval": "良い判断・不的中",
       "note": "⑨ハナブサは2着に届いたが、①ナリタシンが馬券外。"
+    },
+    {
+      "day": 2,
+      "ai": "gpt",
+      "track": "函館",
+      "race": "11R",
+      "raceName": "マリーンS",
+      "strategy": "過小評価穴馬型＋同コース実績重視",
+      "confidence": "B",
+      "betType": "単勝",
+      "selection": "3",
+      "stake": 600,
+      "payout": 0,
+      "status": "miss",
+      "estWinProb": 10,
+      "odds": 15.6,
+      "eval": "良い判断・不的中",
+      "note": "③オウギノカナメは4着。価格妙味の評価は妥当だったが、全券種を③軸へ固定した構造が裏目。"
+    },
+    {
+      "day": 2,
+      "ai": "gpt",
+      "track": "函館",
+      "race": "11R",
+      "raceName": "マリーンS",
+      "strategy": "過小評価穴馬型＋同コース実績重視",
+      "confidence": "B",
+      "betType": "複勝",
+      "selection": "3",
+      "stake": 600,
+      "payout": 0,
+      "status": "miss",
+      "eval": "良い判断・不的中",
+      "note": "③は3着⑪に1馬身差の4着。紙一重だったが軸固定リスクが顕在化。"
+    },
+    {
+      "day": 2,
+      "ai": "gpt",
+      "track": "函館",
+      "race": "11R",
+      "raceName": "マリーンS",
+      "strategy": "過小評価穴馬型＋同コース実績重視",
+      "confidence": "B",
+      "betType": "ワイド",
+      "selection": "3-11",
+      "stake": 300,
+      "payout": 0,
+      "status": "miss",
+      "eval": "良い判断・不的中",
+      "note": "⑪は3着、③は4着。大沼S組の評価は近かったが、直接ワイド⑪-⑫を外した。"
+    },
+    {
+      "day": 2,
+      "ai": "gpt",
+      "track": "函館",
+      "race": "11R",
+      "raceName": "マリーンS",
+      "strategy": "過小評価穴馬型＋同コース実績重視",
+      "confidence": "B",
+      "betType": "ワイド",
+      "selection": "3-12",
+      "stake": 300,
+      "payout": 0,
+      "status": "miss",
+      "eval": "良い判断・不的中",
+      "note": "⑫は2着、③は4着。高評価馬同士の組み合わせを買わなかったことが反省点。"
+    },
+    {
+      "day": 2,
+      "ai": "gpt",
+      "track": "福島",
+      "race": "11R",
+      "raceName": "阿武隈S",
+      "strategy": "斤量変化を利用した穴馬発掘型",
+      "confidence": "B",
+      "betType": "単勝",
+      "selection": "6",
+      "stake": 800,
+      "payout": 0,
+      "status": "miss",
+      "estWinProb": 14,
+      "odds": 12.1,
+      "eval": "悪い判断・不的中",
+      "note": "⑥タイキラフターは12着。前走0.1秒差と斤量減から勝率を過大評価した。"
+    },
+    {
+      "day": 2,
+      "ai": "gpt",
+      "track": "福島",
+      "race": "11R",
+      "raceName": "阿武隈S",
+      "strategy": "斤量変化を利用した穴馬発掘型",
+      "confidence": "B",
+      "betType": "複勝",
+      "selection": "6",
+      "stake": 700,
+      "payout": 0,
+      "status": "miss",
+      "eval": "悪い判断・不的中",
+      "note": "16頭ハンデ戦で単一の前走実績に依存し、推定の不確実性を十分に織り込めなかった。"
+    },
+    {
+      "day": 2,
+      "ai": "gpt",
+      "track": "福島",
+      "race": "11R",
+      "raceName": "阿武隈S",
+      "strategy": "斤量変化を利用した穴馬発掘型",
+      "confidence": "B",
+      "betType": "ワイド",
+      "selection": "6-10",
+      "stake": 400,
+      "payout": 0,
+      "status": "miss",
+      "eval": "悪い判断・不的中",
+      "note": "⑥12着、⑩13着。前走弥彦Sの近接着順を強く評価しすぎた。"
+    },
+    {
+      "day": 2,
+      "ai": "gpt",
+      "track": "福島",
+      "race": "11R",
+      "raceName": "阿武隈S",
+      "strategy": "斤量変化を利用した穴馬発掘型",
+      "confidence": "B",
+      "betType": "ワイド",
+      "selection": "6-13",
+      "stake": 300,
+      "payout": 0,
+      "status": "miss",
+      "eval": "悪い判断・不的中",
+      "note": "⑬は勝利したが⑥が12着。人気馬評価は合っても軸選択が失敗。"
+    },
+    {
+      "day": 2,
+      "ai": "gpt",
+      "track": "高知",
+      "race": "11R",
+      "raceName": "手箱山特別",
+      "strategy": "クラス実績型＋展開差し込み型",
+      "confidence": "C",
+      "betType": "単勝",
+      "selection": "4",
+      "stake": 500,
+      "payout": 0,
+      "status": "miss",
+      "estWinProb": 12,
+      "odds": 9.8,
+      "eval": "悪い判断・不的中",
+      "note": "④ブリーザフレスカは8着。市場に明確な歪みがない中で穴馬を作った判断。"
+    },
+    {
+      "day": 2,
+      "ai": "gpt",
+      "track": "高知",
+      "race": "11R",
+      "raceName": "手箱山特別",
+      "strategy": "クラス実績型＋展開差し込み型",
+      "confidence": "C",
+      "betType": "複勝",
+      "selection": "4",
+      "stake": 300,
+      "payout": 0,
+      "status": "miss",
+      "eval": "悪い判断・不的中",
+      "note": "④は勝負どころで後退。選抜戦で市場序列を覆す根拠が弱かった。"
+    },
+    {
+      "day": 2,
+      "ai": "gpt",
+      "track": "高知",
+      "race": "11R",
+      "raceName": "手箱山特別",
+      "strategy": "クラス実績型＋展開差し込み型",
+      "confidence": "C",
+      "betType": "ワイド",
+      "selection": "4-8",
+      "stake": 300,
+      "payout": 0,
+      "status": "miss",
+      "eval": "悪い判断・不的中",
+      "note": "⑧は2着も④が8着。相手評価は正しかったが穴軸への依存が失敗。"
+    },
+    {
+      "day": 2,
+      "ai": "gpt",
+      "track": "高知",
+      "race": "11R",
+      "raceName": "手箱山特別",
+      "strategy": "クラス実績型＋展開差し込み型",
+      "confidence": "C",
+      "betType": "ワイド",
+      "selection": "1-4",
+      "stake": 300,
+      "payout": 0,
+      "status": "miss",
+      "eval": "悪い判断・不的中",
+      "note": "①5着、④8着。上位人気と能力評価が整合するレースで無理に参戦した。"
+    },
+    {
+      "day": 2,
+      "ai": "claude",
+      "track": "函館",
+      "race": "11R",
+      "raceName": "マリーンS",
+      "strategy": "軸安定型（前哨戦直結仮説）",
+      "confidence": "C",
+      "betType": "単勝",
+      "selection": "11",
+      "stake": 300,
+      "payout": 0,
+      "status": "miss",
+      "estWinProb": 15,
+      "odds": 8.5,
+      "eval": "良い判断・不的中",
+      "note": "⑪ヒルノハンブルクは3着。前哨戦直結仮説は機能したが単勝は不的中。"
+    },
+    {
+      "day": 2,
+      "ai": "claude",
+      "track": "函館",
+      "race": "11R",
+      "raceName": "マリーンS",
+      "strategy": "軸安定型（前哨戦直結仮説）",
+      "confidence": "C",
+      "betType": "ワイド",
+      "selection": "11-12",
+      "stake": 500,
+      "payout": 2350,
+      "status": "hit",
+      "eval": "良い判断・的中",
+      "note": "大沼S好走馬の同一仮説で⑪と⑫を組み合わせ、2・3着で的中。"
+    },
+    {
+      "day": 2,
+      "ai": "claude",
+      "track": "高知",
+      "race": "9R",
+      "raceName": "B-3",
+      "strategy": "穴馬発掘型（時計優位仮説）",
+      "confidence": "B",
+      "betType": "単勝",
+      "selection": "9",
+      "stake": 300,
+      "payout": 0,
+      "status": "miss",
+      "estWinProb": 20,
+      "odds": 6.9,
+      "eval": "良い判断・不的中",
+      "note": "⑨ミラクルドリームは2着。時計優位仮説は支持されたが⑧に押し切られた。"
+    },
+    {
+      "day": 2,
+      "ai": "claude",
+      "track": "高知",
+      "race": "9R",
+      "raceName": "B-3",
+      "strategy": "穴馬発掘型（時計優位仮説）",
+      "confidence": "B",
+      "betType": "複勝",
+      "selection": "9",
+      "stake": 700,
+      "payout": 1680,
+      "status": "hit",
+      "eval": "良い判断・的中",
+      "note": "⑨が2着。複勝を厚くした資金配分で利益を確保。"
+    },
+    {
+      "day": 2,
+      "ai": "claude",
+      "track": "高知",
+      "race": "9R",
+      "raceName": "B-3",
+      "strategy": "穴馬発掘型（時計優位仮説）",
+      "confidence": "B",
+      "betType": "ワイド",
+      "selection": "6-9",
+      "stake": 400,
+      "payout": 0,
+      "status": "miss",
+      "eval": "良い判断・不的中",
+      "note": "⑨は2着、⑥は4着。時計上位の同一仮説だったが相手が一歩届かず。"
     }
   ],
   "skips": [
@@ -416,21 +712,53 @@
       "reason": "上位5頭のオッズが密集し、逃げ・先行該当馬不在でペース予測の信頼度が低かったため撤退。",
       "result": "1番人気⑩ハクサンフラッシュが単勝290円で勝利。",
       "saved": true
-    }
-  ],
-  "articles": [ 
-    {
-    "day": 0,
-    "date": "2026-07-16",
-    "title": "開催前夜",
-    "src": "day0.png",
-    "note": "いよいよ明日開幕"
     },
     {
-    "day": 1,
-    "date": "2026-07-17",
-    "title": "開催日1　GPT Fundが初戦勝利",
-    "src": "day1.png",
-    "note": "名古屋9RでGPT Fundが3点全的中。開催日収支はGPT +3,180円、Claude +1,100円。"
-  }]
+      "day": 2,
+      "ai": "gpt",
+      "race": "高知9R B-3",
+      "reason": "上位人気3頭の市場評価と能力評価の差が小さく、控除率を上回る明確な優位性を作れなかった。",
+      "result": "⑧スノーホルンロードが勝利、⑨ミラクルドリーム2着。仮想候補③は6着、危険視した②は8着。",
+      "saved": true
+    },
+    {
+      "day": 2,
+      "ai": "claude",
+      "race": "福島11R 阿武隈S",
+      "reason": "16頭フルゲートの夏福島ハンデ戦で推定勝率の信頼度が低く、EV基準を信頼区間込みで満たす馬を特定できなかった。",
+      "result": "2番人気⑬ミラビリスマジックが勝利。1番人気⑯と仮想候補⑯は15着で、仮想買い目も不発。",
+      "saved": true
+    },
+    {
+      "day": 2,
+      "ai": "claude",
+      "race": "高知11R 手箱山特別",
+      "reason": "オッズ序列と実力序列がおおむね整合し、推定勝率×オッズが基準1.2を明確に満たす馬がいなかった。",
+      "result": "③ブルグミューラーが勝利、⑧カムランベイ2着。仮想ワイド⑧-⑨は⑨7着で不的中。",
+      "saved": true
+    }
+  ],
+  "articles": [
+    {
+      "day": 0,
+      "date": "2026-07-16",
+      "title": "開催前夜",
+      "src": "day0.png",
+      "note": "いよいよ明日開幕"
+    },
+    {
+      "day": 1,
+      "date": "2026-07-17",
+      "title": "開催日1　GPT Fundが初戦勝利",
+      "src": "day1.png",
+      "note": "名古屋9RでGPT Fundが3点全的中。開催日収支はGPT +3,180円、Claude +1,100円。"
+    },
+    {
+      "day": 2,
+      "date": "2026-07-18",
+      "title": "開催日2　Claude Fundが逆転首位",
+      "src": "day2.png",
+      "note": "函館11Rワイド⑪-⑫的中などでClaude +1,830円。GPTは12点全て不的中で-5,400円、純資産首位が交代。"
+    }
+  ]
 }
