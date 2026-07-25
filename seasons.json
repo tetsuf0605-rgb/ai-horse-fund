@@ -1,0 +1,7 @@
+{
+  "current": 2,
+  "seasons": [
+    { "season": 1, "file": "fund_data_s1.json" },
+    { "season": 2, "file": "fund_data.json" }
+  ]
+}
