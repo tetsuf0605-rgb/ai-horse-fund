@@ -1432,8 +1432,10 @@ async function init(){
     CURRENT_SEASON = DATA.meta.season || 1;
     SEASONS.set(CURRENT_SEASON, DATA);
   }
-  VIEW_SEASON = CURRENT_SEASON;
+  VIEW_SEASON = SEASONS.has(CURRENT_SEASON) ? CURRENT_SEASON : Math.max(...SEASONS.keys());
+  CURRENT_SEASON = Math.max(CURRENT_SEASON, VIEW_SEASON, ...SEASONS.keys());
   DATA = SEASONS.get(VIEW_SEASON);
+  if(!SEASONS.has(CURRENT_SEASON)) sourceTxt += `　※SEASON ${CURRENT_SEASON}のデータ未検出のためSEASON ${VIEW_SEASON}を表示中`;
   srcEl().textContent = sourceTxt;
   srcEl().style.color = sourceCol;
   renderSeasonSel(); renderAll(); renderAllTime();
