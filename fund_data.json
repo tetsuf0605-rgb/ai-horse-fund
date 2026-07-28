@@ -4,14 +4,14 @@
     "season": 2,
     "unit": "meeting",
     "totalMeets": 10,
-    "completedMeets": 3,
+    "completedMeets": 4,
     "activeMeet": null,
-    "currentMeet": 3,
+    "currentMeet": 4,
     "lastUpdated": "2026-07-28",
     "initialBalance": 30000,
     "currency": "JPY",
-    "officialLedger": "AI_Horse_Fund_S2台帳_v4.md",
-    "note": "Season 1はfund_data_s1.jsonとして凍結。Season 2はmeet・raceSeq・dateを正規識別子として別管理する。開催③は6レース成立により自動クローズ。"
+    "officialLedger": "AI_Horse_Fund_S2台帳_v5改1.md",
+    "note": "Season 1はfund_data_s1.jsonとして凍結。Season 2はmeet・raceSeq・dateを正規識別子として別管理する。開催④は成立5レースに対するオーナークローズ宣言で確定。開催⑤から第1段をオッズ非依存の全券種スクリーン方式へ標準化する。"
   },
   "funds": {
     "gpt": {
@@ -19,7 +19,7 @@
       "style": "事前仮説固定・直前EV選別型",
       "riskScore": "4/10",
       "mainBets": "単勝・ワイド中心／レース構造で使い分け",
-      "strategy": "事前仮説と市場価格の差を評価し、推定誤差を差し引いても期待値が残る買い目を優先する。着順・着差・コーナー通過順の三点照合を必須化し、能力上位馬が価格不足のときは代替候補へ価値を作る前に見送りゲートを通す。馬場等で順位を変更した場合は接続表を再作成し、ワイドは独立根拠に加えて同時馬券内率の保守下限を審査する。通常参戦3〜7％、低信頼等の小口表現1〜3％、暦日20％以内を目安とする。"
+      "strategy": "事前仮説と市場価格の差を評価し、推定誤差を差し引いても期待値が残る買い目を優先する。着順・着差・コーナー通過順の三点照合に加え、ワイド行列の交差セルを画像で再確認する。能力上位馬が価格不足のときは代替候補へ価値を作る前に見送りゲートを通し、ワイドでは先行競合型と前残り共存型を分離して同時馬券内率を審査する。開催⑤から第1段で複勝・ワイドを含む全券種の発動線をオッズ非依存で先出しする。通常参戦3〜7％、低信頼等の小口表現1〜3％、暦日20％以内を目安とする。"
     },
     "claude": {
       "name": "Claude Fund",
@@ -129,6 +129,40 @@
         "worst": "GPTは6レースすべてに小口参戦して全15点中、開催③追加7点が全滅。能力上位の価格不足後に中位・下位人気へ価値を作りすぎた。",
         "bestSkip": "ClaudeはR1〜R3とR6を見送り、R1〜R3の仮想買い目不的中を回避。R6は②が勝ったが単勝210円では推定EV不成立として数理上の見送り理由は維持された。",
         "priceRisk": "金沢1R⑤3.0→1.4、名古屋4R①6.9→3.1、盛岡8R②3.7→2.6・⑧6.5→11.7など直前変動が拡大。買い方向・売り方向のスナップショットノイズをS2-M04で追跡する。"
+      }
+    },
+    {
+      "meet": 4,
+      "day": 4,
+      "dates": [
+        "2026-07-28"
+      ],
+      "status": "closed",
+      "closedReason": "owner_declaration",
+      "raceCount": 5,
+      "tracks": [
+        "盛岡",
+        "名古屋",
+        "金沢"
+      ],
+      "result": {
+        "winner": "claude",
+        "gptProfit": -1000,
+        "claudeProfit": 0,
+        "gptEndingBalance": 24280,
+        "claudeEndingBalance": 27320,
+        "directMatch": {
+          "gptWins": 0,
+          "claudeWins": 2,
+          "draws": 3,
+          "excluded": 0
+        }
+      },
+      "comments": {
+        "best": "GPTは後半3レースをすべて見送り、仮想単勝③・⑧・①の不的中を回避。開催③の6レース皆勤から見送りゲートを実装した。",
+        "worst": "GPTはR1ワイド④-⑨とR2単勝③がともに不的中。R1ではワイド行列を60倍台と誤読し、正しい17.5〜19.9倍との事実不一致が記録不備となった。",
+        "bestSkip": "金沢9Rは能力上位⑤が1.2倍で勝利した一方、代替候補⑧は7着。GPTは価格不足の上位馬から別の穴馬へ無理に乗り換えず、資本を保全した。",
+        "priceRisk": "名港盃⑦は2.9→3.5へ離反後に勝利、金沢⑧は15.0→7.0へ集中後7着、名古屋12R⑥は28.0→48.8→最終71.1倍へ発散後勝利。市場変動方向は開催内でも不安定だった。"
       }
     }
   ],
@@ -1055,6 +1089,405 @@
         ],
         "note": "②・⑧は市場修正と結果が同方向。②は能力序列が正しくても価格がなく、Claudeは正規見送り。"
       }
+    },
+    {
+      "meet": 4,
+      "day": 4,
+      "raceSeq": 1,
+      "date": "2026-07-28",
+      "track": "盛岡",
+      "race": "12R",
+      "raceName": "オパールカップ（M2）",
+      "surface": "芝",
+      "distance": 1700,
+      "going": "重",
+      "status": "official",
+      "shortNotice": false,
+      "oddsCapturedAt": "18:00",
+      "oddsLeadMinutes": 15,
+      "result": {
+        "first": {
+          "number": 8,
+          "name": "ローザレイア"
+        },
+        "second": {
+          "number": 3,
+          "name": "ムーンウォーリア"
+        },
+        "third": {
+          "number": 1,
+          "name": "コンヨバンコ"
+        }
+      },
+      "profits": {
+        "gpt": -500,
+        "claude": 0
+      },
+      "directResult": "claude",
+      "calibrationNote": "GPTのワイド④-⑨は正しいロック価格17.5〜19.9倍でも参戦基準を満たしたが、初回ロック文で60倍台と誤読。inputDefect: oddsMatrixReadとして通常EV較正から除外。"
+    },
+    {
+      "meet": 4,
+      "day": 4,
+      "raceSeq": 2,
+      "date": "2026-07-28",
+      "track": "名古屋",
+      "race": "9R",
+      "raceName": "夏の大三角特別B1a",
+      "surface": "ダート",
+      "distance": 1500,
+      "going": "不良",
+      "status": "official",
+      "shortNotice": false,
+      "oddsCapturedAt": "18:31",
+      "oddsLeadMinutes": 14,
+      "result": {
+        "first": {
+          "number": 8,
+          "name": "エピックナイト"
+        },
+        "second": {
+          "number": 11,
+          "name": "サラサラヘアー"
+        },
+        "third": {
+          "number": 4,
+          "name": "クルベリ"
+        },
+        "payouts": [
+          {
+            "betType": "ワイド",
+            "selection": "8-11",
+            "per100": 810
+          }
+        ]
+      },
+      "profits": {
+        "gpt": -500,
+        "claude": 0
+      },
+      "directResult": "claude",
+      "calibrationNote": "GPTは③ワカギミを単勝へ接続し4着。Claudeは⑧-⑪ワイドを事前未宣言・市場ドリフト・検証中カテゴリとして不採用にしたが、結果は的中。"
+    },
+    {
+      "meet": 4,
+      "day": 4,
+      "raceSeq": 3,
+      "date": "2026-07-28",
+      "track": "名古屋",
+      "race": "11R",
+      "raceName": "名港盃（SP1）",
+      "surface": "ダート",
+      "distance": 1700,
+      "going": "不良",
+      "status": "official",
+      "shortNotice": false,
+      "oddsCapturedAt": "19:39",
+      "oddsLeadMinutes": 16,
+      "result": {
+        "first": {
+          "number": 7,
+          "name": "ベント"
+        },
+        "second": {
+          "number": 10,
+          "name": "ウィットビーアビー"
+        },
+        "third": {
+          "number": 8,
+          "name": "カワテンマックス"
+        },
+        "payouts": [
+          {
+            "betType": "単勝",
+            "selection": "7",
+            "per100": 320
+          },
+          {
+            "betType": "複勝",
+            "selection": "7",
+            "per100": 150
+          },
+          {
+            "betType": "複勝",
+            "selection": "10",
+            "per100": 120
+          },
+          {
+            "betType": "複勝",
+            "selection": "8",
+            "per100": 240
+          },
+          {
+            "betType": "ワイド",
+            "selection": "7-10",
+            "per100": 290
+          },
+          {
+            "betType": "ワイド",
+            "selection": "7-8",
+            "per100": 460
+          },
+          {
+            "betType": "ワイド",
+            "selection": "8-10",
+            "per100": 540
+          }
+        ]
+      },
+      "profits": {
+        "gpt": 0,
+        "claude": 0
+      },
+      "directResult": "draw",
+      "oddsMovement": {
+        "observed": [
+          {
+            "selection": "7",
+            "earlierOdds": 2.9,
+            "lockedOdds": 3.5,
+            "finalOdds": 3.2,
+            "direction": "drift",
+            "resultFinish": 1
+          },
+          {
+            "selection": "10",
+            "earlierOdds": 4.5,
+            "lockedOdds": 3.4,
+            "direction": "shorten",
+            "resultFinish": 2
+          },
+          {
+            "selection": "8",
+            "earlierOdds": 9.3,
+            "lockedOdds": 6.8,
+            "direction": "shorten",
+            "resultFinish": 3
+          }
+        ],
+        "note": "序列1位⑦からの離反は誤り方向。⑩・⑧への集中は複勝圏では正解方向。"
+      },
+      "calibrationNote": "GPTは⑦と⑩の先行競合を過大視し、能力上位同士のワイド接続を事前候補から除外。実際は前方3頭がそのまま1〜3着となった。"
+    },
+    {
+      "meet": 4,
+      "day": 4,
+      "raceSeq": 4,
+      "date": "2026-07-28",
+      "track": "金沢",
+      "race": "9R",
+      "raceName": "「葛山画伯」記念B2四",
+      "surface": "ダート",
+      "distance": 1500,
+      "going": "不良",
+      "status": "official",
+      "shortNotice": true,
+      "oddsCapturedAt": "20:00",
+      "oddsReceivedAt": "20:03",
+      "oddsLeadMinutes": 7,
+      "result": {
+        "first": {
+          "number": 5,
+          "name": "リリーブライト"
+        },
+        "second": {
+          "number": 11,
+          "name": "ドンタカーミ"
+        },
+        "third": {
+          "number": 9,
+          "name": "ハガネ"
+        },
+        "payouts": [
+          {
+            "betType": "単勝",
+            "selection": "5",
+            "per100": 120
+          },
+          {
+            "betType": "複勝",
+            "selection": "5",
+            "per100": 110
+          },
+          {
+            "betType": "複勝",
+            "selection": "11",
+            "per100": 160
+          },
+          {
+            "betType": "複勝",
+            "selection": "9",
+            "per100": 150
+          },
+          {
+            "betType": "ワイド",
+            "selection": "5-11",
+            "per100": 280
+          },
+          {
+            "betType": "ワイド",
+            "selection": "5-9",
+            "per100": 270
+          },
+          {
+            "betType": "ワイド",
+            "selection": "9-11",
+            "per100": 580
+          }
+        ]
+      },
+      "profits": {
+        "gpt": 0,
+        "claude": 0
+      },
+      "directResult": "draw",
+      "oddsMovement": {
+        "observed": [
+          {
+            "selection": "8",
+            "earlierOdds": 15.0,
+            "lockedOdds": 7.0,
+            "direction": "shorten",
+            "resultFinish": 7
+          },
+          {
+            "selection": "6",
+            "earlierOdds": 35.7,
+            "lockedOdds": 78.2,
+            "direction": "drift",
+            "resultFinish": 6
+          },
+          {
+            "selection": "7",
+            "earlierOdds": 23.3,
+            "lockedOdds": 14.7,
+            "direction": "shorten",
+            "resultFinish": 5
+          }
+        ],
+        "note": "序列候補⑧への大幅集中は誤り方向。最終市場は⑤へさらに集中し、⑤が5馬身差で逃げ切った。"
+      },
+      "calibrationNote": "GPTは⑤の能力上位を認めつつ1.6倍では価格不足として見送り、代替候補⑧の保守EV不足も棄却。⑧7着で見送りゲートが機能。"
+    },
+    {
+      "meet": 4,
+      "day": 4,
+      "raceSeq": 5,
+      "date": "2026-07-28",
+      "track": "名古屋",
+      "race": "12R",
+      "raceName": "金シャチ最終戦777C",
+      "surface": "ダート",
+      "distance": 1500,
+      "going": "不良",
+      "status": "official",
+      "shortNotice": false,
+      "oddsCapturedAt": "20:18",
+      "oddsLeadMinutes": 12,
+      "scratched": [
+        {
+          "number": 7,
+          "name": "アップメイヒメ"
+        }
+      ],
+      "didNotFinish": [
+        {
+          "number": 4,
+          "name": "ベッラフロー",
+          "status": "中止"
+        }
+      ],
+      "result": {
+        "first": {
+          "number": 6,
+          "name": "シャインモノリス"
+        },
+        "second": {
+          "number": 8,
+          "name": "ビックピカンテ"
+        },
+        "third": {
+          "number": 12,
+          "name": "ヴィヴィアンワン"
+        },
+        "payouts": [
+          {
+            "betType": "単勝",
+            "selection": "6",
+            "per100": 7110
+          },
+          {
+            "betType": "複勝",
+            "selection": "6",
+            "per100": 1200
+          },
+          {
+            "betType": "複勝",
+            "selection": "8",
+            "per100": 140
+          },
+          {
+            "betType": "複勝",
+            "selection": "12",
+            "per100": 250
+          },
+          {
+            "betType": "ワイド",
+            "selection": "6-8",
+            "per100": 3690
+          },
+          {
+            "betType": "ワイド",
+            "selection": "6-12",
+            "per100": 7070
+          },
+          {
+            "betType": "ワイド",
+            "selection": "8-12",
+            "per100": 520
+          }
+        ]
+      },
+      "profits": {
+        "gpt": 0,
+        "claude": 0
+      },
+      "directResult": "draw",
+      "oddsMovement": {
+        "observed": [
+          {
+            "selection": "8",
+            "earlierOdds": 3.2,
+            "lockedOdds": 3.9,
+            "direction": "drift",
+            "resultFinish": 2
+          },
+          {
+            "selection": "1",
+            "earlierOdds": 8.9,
+            "lockedOdds": 6.5,
+            "direction": "shorten",
+            "resultFinish": 7
+          },
+          {
+            "selection": "3",
+            "earlierOdds": 13.7,
+            "lockedOdds": 8.9,
+            "direction": "shorten",
+            "resultFinish": 8
+          },
+          {
+            "selection": "6",
+            "earlierOdds": 28.0,
+            "lockedOdds": 48.8,
+            "finalOdds": 71.1,
+            "direction": "drift",
+            "resultFinish": 1
+          }
+        ],
+        "note": "⑥は発散後に逃げ切り。市場変動方向を能力評価へ直結できない逆例となった。"
+      },
+      "calibrationNote": "GPTは⑥を逃げ候補として認識したが終いの信頼度を低く置き、単騎逃げ時の残存率を過小評価。"
     }
   ],
   "transactions": [
@@ -1069,13 +1502,13 @@
       "raceName": "C2七組",
       "strategy": "市場過小評価＋高評価馬接続型",
       "confidence": "B",
-      "betType": "単勝",
-      "selection": "5",
-      "stake": 500,
-      "payout": 0,
-      "status": "miss",
-      "eval": "良い判断・不的中",
-      "note": "⑤グレルは3着。市場過小評価の着眼はワイドへ接続して機能したが、単勝では勝ち切れなかった。"
+      "betType": "ワイド",
+      "selection": "5-6",
+      "stake": 300,
+      "payout": 1170,
+      "status": "hit",
+      "eval": "良い判断・的中",
+      "note": "⑤3着・⑥2着。市場過小評価馬と能力上位馬の横接続が成功。"
     },
     {
       "meet": 1,
@@ -1107,13 +1540,51 @@
       "raceName": "C2七組",
       "strategy": "市場過小評価＋高評価馬接続型",
       "confidence": "B",
+      "betType": "単勝",
+      "selection": "5",
+      "stake": 500,
+      "payout": 0,
+      "status": "miss",
+      "eval": "良い判断・不的中",
+      "note": "⑤グレルは3着。市場過小評価の着眼はワイドへ接続して機能したが、単勝では勝ち切れなかった。"
+    },
+    {
+      "meet": 1,
+      "day": 1,
+      "raceSeq": 2,
+      "date": "2026-07-26",
+      "ai": "claude",
+      "track": "盛岡",
+      "race": "3R",
+      "raceName": "C2七組",
+      "strategy": "⑨の複勝基礎枠＋ワイド接続",
+      "confidence": "C",
       "betType": "ワイド",
-      "selection": "5-6",
-      "stake": 300,
-      "payout": 1170,
+      "selection": "8-9",
+      "stake": 400,
+      "payout": 0,
+      "status": "miss",
+      "eval": "悪い判断・不的中",
+      "note": "⑨は勝利したが接続先⑧が7着。⑨依存100%の弱点が出た。点別金額はオーナー引き継ぎの最終ロック記録に基づき補完。"
+    },
+    {
+      "meet": 1,
+      "day": 1,
+      "raceSeq": 2,
+      "date": "2026-07-26",
+      "ai": "claude",
+      "track": "盛岡",
+      "race": "3R",
+      "raceName": "C2七組",
+      "strategy": "⑨の複勝基礎枠＋ワイド接続",
+      "confidence": "C",
+      "betType": "複勝",
+      "selection": "9",
+      "stake": 600,
+      "payout": 900,
       "status": "hit",
       "eval": "良い判断・的中",
-      "note": "⑤3着・⑥2着。市場過小評価馬と能力上位馬の横接続が成功。"
+      "note": "⑨ブルコが1着、複勝150円。点別金額はオーナー引き継ぎの最終ロック記録に基づき補完。"
     },
     {
       "meet": 1,
@@ -1162,44 +1633,6 @@
       "finalOddsEV": 0.39,
       "eval": "良い判断・的中",
       "note": "⑤グローラヴェンコが1着。能力評価は成功したが、ロック後に7.3倍から2.3倍へ急落。"
-    },
-    {
-      "meet": 1,
-      "day": 1,
-      "raceSeq": 2,
-      "date": "2026-07-26",
-      "ai": "claude",
-      "track": "盛岡",
-      "race": "3R",
-      "raceName": "C2七組",
-      "strategy": "⑨の複勝基礎枠＋ワイド接続",
-      "confidence": "C",
-      "betType": "複勝",
-      "selection": "9",
-      "stake": 600,
-      "payout": 900,
-      "status": "hit",
-      "eval": "良い判断・的中",
-      "note": "⑨ブルコが1着、複勝150円。点別金額はオーナー引き継ぎの最終ロック記録に基づき補完。"
-    },
-    {
-      "meet": 1,
-      "day": 1,
-      "raceSeq": 2,
-      "date": "2026-07-26",
-      "ai": "claude",
-      "track": "盛岡",
-      "race": "3R",
-      "raceName": "C2七組",
-      "strategy": "⑨の複勝基礎枠＋ワイド接続",
-      "confidence": "C",
-      "betType": "ワイド",
-      "selection": "8-9",
-      "stake": 400,
-      "payout": 0,
-      "status": "miss",
-      "eval": "悪い判断・不的中",
-      "note": "⑨は勝利したが接続先⑧が7着。⑨依存100%の弱点が出た。点別金額はオーナー引き継ぎの最終ロック記録に基づき補完。"
     },
     {
       "meet": 1,
@@ -1444,50 +1877,6 @@
     {
       "meet": 3,
       "day": 3,
-      "raceSeq": 5,
-      "date": "2026-07-28",
-      "ai": "gpt",
-      "track": "名古屋",
-      "race": "4R",
-      "raceName": "3歳12組",
-      "strategy": "ダート能力と先行力の異経路ワイド接続",
-      "confidence": "D",
-      "betType": "ワイド",
-      "selection": "1-4",
-      "stake": 500,
-      "payout": 0,
-      "status": "miss",
-      "estimatedOdds": "9.0-10.0",
-      "estimatedHitProb": 18,
-      "estimatedEV": 1.62,
-      "eval": "悪い判断・不的中",
-      "note": "①モータリゼーション2着・④チェリーブルーム6着。不良馬場反映後の①・⑦上方修正は正しかったが、順位変更後に接続表を再作成せず④へ接続した。"
-    },
-    {
-      "meet": 3,
-      "day": 3,
-      "raceSeq": 6,
-      "date": "2026-07-28",
-      "ai": "gpt",
-      "track": "盛岡",
-      "race": "8R",
-      "raceName": "アンタレス賞B1",
-      "strategy": "地元芝適性とJRA芝実績の異根拠ワイド",
-      "confidence": "C",
-      "betType": "ワイド",
-      "selection": "5-9",
-      "stake": 500,
-      "payout": 0,
-      "status": "miss",
-      "estimatedOdds": "14.1-15.8",
-      "estimatedHitProb": 12,
-      "estimatedEV": 1.69,
-      "eval": "悪い判断・不的中",
-      "note": "⑤シマサンブラック8着・⑨ウインイルネージュ6着。根拠独立性はあったが同時馬券内率を過大評価した。"
-    },
-    {
-      "meet": 3,
-      "day": 3,
       "raceSeq": 4,
       "date": "2026-07-28",
       "ai": "claude",
@@ -1513,6 +1902,28 @@
       "day": 3,
       "raceSeq": 5,
       "date": "2026-07-28",
+      "ai": "gpt",
+      "track": "名古屋",
+      "race": "4R",
+      "raceName": "3歳12組",
+      "strategy": "ダート能力と先行力の異経路ワイド接続",
+      "confidence": "D",
+      "betType": "ワイド",
+      "selection": "1-4",
+      "stake": 500,
+      "payout": 0,
+      "status": "miss",
+      "estimatedOdds": "9.0-10.0",
+      "estimatedHitProb": 18,
+      "estimatedEV": 1.62,
+      "eval": "悪い判断・不的中",
+      "note": "①モータリゼーション2着・④チェリーブルーム6着。不良馬場反映後の①・⑦上方修正は正しかったが、順位変更後に接続表を再作成せず④へ接続した。"
+    },
+    {
+      "meet": 3,
+      "day": 3,
+      "raceSeq": 5,
+      "date": "2026-07-28",
       "ai": "claude",
       "track": "名古屋",
       "race": "4R",
@@ -1530,6 +1941,78 @@
       "oddsType": "official_win",
       "eval": "悪い判断・不的中",
       "note": "④チェリーブルームは6着。芝短距離のテンを初ダート1500mの勝ち切りへ過大接続し、ロック時上昇もノイズとなった。"
+    },
+    {
+      "meet": 3,
+      "day": 3,
+      "raceSeq": 6,
+      "date": "2026-07-28",
+      "ai": "gpt",
+      "track": "盛岡",
+      "race": "8R",
+      "raceName": "アンタレス賞B1",
+      "strategy": "地元芝適性とJRA芝実績の異根拠ワイド",
+      "confidence": "C",
+      "betType": "ワイド",
+      "selection": "5-9",
+      "stake": 500,
+      "payout": 0,
+      "status": "miss",
+      "estimatedOdds": "14.1-15.8",
+      "estimatedHitProb": 12,
+      "estimatedEV": 1.69,
+      "eval": "悪い判断・不的中",
+      "note": "⑤シマサンブラック8着・⑨ウインイルネージュ6着。根拠独立性はあったが同時馬券内率を過大評価した。"
+    },
+    {
+      "meet": 4,
+      "day": 4,
+      "raceSeq": 1,
+      "date": "2026-07-28",
+      "ai": "gpt",
+      "track": "盛岡",
+      "race": "12R",
+      "raceName": "オパールカップ（M2）",
+      "strategy": "芝重賞の異根拠ワイド接続",
+      "confidence": "C",
+      "betType": "ワイド",
+      "selection": "4-9",
+      "stake": 500,
+      "payout": 0,
+      "status": "miss",
+      "estimatedOdds": "17.5-19.9",
+      "estimatedHitProb": 8,
+      "estimatedEV": 1.4,
+      "eval": "悪い判断・不的中",
+      "note": "④ソラーロ5着・⑨アップタウン6着。正しい価格でも基準は満たしたが、同時馬券内率の推定は不成立。初回ロック文でワイド行列を60倍台と誤読した。",
+      "inputDefect": true,
+      "calibrationExcluded": true,
+      "inputDefectReason": "ワイド行列の交差セルを誤読。正17.5〜19.9倍を60.0〜62.8倍と記載した。"
+    },
+    {
+      "meet": 4,
+      "day": 4,
+      "raceSeq": 2,
+      "date": "2026-07-28",
+      "ai": "gpt",
+      "track": "名古屋",
+      "race": "9R",
+      "raceName": "夏の大三角特別B1a",
+      "strategy": "高オッズ単勝の勝ち切り価格優位",
+      "confidence": "C",
+      "betType": "単勝",
+      "selection": "3",
+      "stake": 500,
+      "payout": 0,
+      "status": "miss",
+      "estWinProb": 9,
+      "conservativeWinProb": 5.5,
+      "odds": 26.4,
+      "estimatedEV": 2.38,
+      "conservativeEV": 1.45,
+      "oddsType": "official_win",
+      "eval": "悪い判断・不的中",
+      "note": "③ワカギミは4着。保守EVは基準を満たしたが、能力上位を逆転する勝ち切り確率を高く置きすぎた。"
     }
   ],
   "skips": [
@@ -1563,69 +2046,6 @@
     {
       "meet": 1,
       "day": 1,
-      "raceSeq": 3,
-      "date": "2026-07-26",
-      "ai": "gpt",
-      "track": "札幌",
-      "race": "7R",
-      "raceName": "3歳以上1勝クラス",
-      "skipType": "voluntary",
-      "reason": "買い目候補に価格優位がなく、見送り。",
-      "virtualBets": [
-        {
-          "betType": "単勝",
-          "selection": "3",
-          "result": "miss"
-        }
-      ],
-      "result": "⑥→②→④。仮想単勝③は7着。",
-      "saved": true,
-      "evaluation": {
-        "capitalPreservation": "◎完全保全",
-        "reasonAccuracy": "正",
-        "smallExpression": "なし"
-      },
-      "note": "⑥の勝利可能性を認識しながら価格不足を理由に撤退。"
-    },
-    {
-      "meet": 1,
-      "day": 1,
-      "raceSeq": 6,
-      "date": "2026-07-26",
-      "ai": "gpt",
-      "track": "中京",
-      "race": "6R",
-      "raceName": "木曽川特別",
-      "skipType": "voluntary",
-      "reason": "上位候補すべて単勝EV1.20未満。価格だけで穴馬を作らず見送り。",
-      "virtualBets": [
-        {
-          "betType": "単勝",
-          "selection": "5",
-          "odds": 6.9,
-          "estimatedEV": 1.04,
-          "result": "miss"
-        },
-        {
-          "betType": "単勝",
-          "selection": "10",
-          "odds": 12.3,
-          "estimatedEV": 0.98,
-          "result": "miss"
-        }
-      ],
-      "result": "①→②→⑨。⑤4着、⑩8着。",
-      "saved": true,
-      "evaluation": {
-        "capitalPreservation": "◎完全保全",
-        "reasonAccuracy": "正",
-        "smallExpression": "なし"
-      },
-      "note": "能力序列は正しく、低価格を無理に買わなかった。"
-    },
-    {
-      "meet": 1,
-      "day": 1,
       "raceSeq": 1,
       "date": "2026-07-26",
       "ai": "claude",
@@ -1651,6 +2071,33 @@
         "smallExpression": "あり"
       },
       "note": "確定3.1倍での真のEVは0.68〜0.81と推定され、数理的な不購入は妥当だが結果論では機会損失。"
+    },
+    {
+      "meet": 1,
+      "day": 1,
+      "raceSeq": 3,
+      "date": "2026-07-26",
+      "ai": "gpt",
+      "track": "札幌",
+      "race": "7R",
+      "raceName": "3歳以上1勝クラス",
+      "skipType": "voluntary",
+      "reason": "買い目候補に価格優位がなく、見送り。",
+      "virtualBets": [
+        {
+          "betType": "単勝",
+          "selection": "3",
+          "result": "miss"
+        }
+      ],
+      "result": "⑥→②→④。仮想単勝③は7着。",
+      "saved": true,
+      "evaluation": {
+        "capitalPreservation": "◎完全保全",
+        "reasonAccuracy": "正",
+        "smallExpression": "なし"
+      },
+      "note": "⑥の勝利可能性を認識しながら価格不足を理由に撤退。"
     },
     {
       "meet": 1,
@@ -1717,6 +2164,42 @@
         "smallExpression": "なし"
       },
       "note": "能力序列1位⑤が勝利、複勝圏1位⑥が3着。②の評価は過大だった。"
+    },
+    {
+      "meet": 1,
+      "day": 1,
+      "raceSeq": 6,
+      "date": "2026-07-26",
+      "ai": "gpt",
+      "track": "中京",
+      "race": "6R",
+      "raceName": "木曽川特別",
+      "skipType": "voluntary",
+      "reason": "上位候補すべて単勝EV1.20未満。価格だけで穴馬を作らず見送り。",
+      "virtualBets": [
+        {
+          "betType": "単勝",
+          "selection": "5",
+          "odds": 6.9,
+          "estimatedEV": 1.04,
+          "result": "miss"
+        },
+        {
+          "betType": "単勝",
+          "selection": "10",
+          "odds": 12.3,
+          "estimatedEV": 0.98,
+          "result": "miss"
+        }
+      ],
+      "result": "①→②→⑨。⑤4着、⑩8着。",
+      "saved": true,
+      "evaluation": {
+        "capitalPreservation": "◎完全保全",
+        "reasonAccuracy": "正",
+        "smallExpression": "なし"
+      },
+      "note": "能力序列は正しく、低価格を無理に買わなかった。"
     },
     {
       "meet": 1,
@@ -2028,6 +2511,290 @@
         "smallExpression": "なし"
       },
       "note": "結果上は機会損失だが、最終価格でもEV0.63で有効買い目の棄却ではなく誤見送りカウンタ非算入。"
+    },
+    {
+      "meet": 4,
+      "day": 4,
+      "raceSeq": 1,
+      "date": "2026-07-28",
+      "ai": "claude",
+      "track": "盛岡",
+      "race": "12R",
+      "raceName": "オパールカップ（M2）",
+      "skipType": "voluntary",
+      "reason": "序列1位④の単勝は正式価格でも発動線に届かず、自主見送り。",
+      "virtualBets": [
+        {
+          "betType": "単勝",
+          "selection": "4",
+          "stake": 500,
+          "estimatedEV": 0.9,
+          "result": "miss",
+          "finish": 5
+        }
+      ],
+      "result": "⑧→③→①。④ソラーロは5着。",
+      "saved": true,
+      "evaluation": {
+        "capitalPreservation": "◎完全保全",
+        "reasonAccuracy": "正",
+        "smallExpression": "なし"
+      },
+      "note": "仮想単勝④の不的中を回避。"
+    },
+    {
+      "meet": 4,
+      "day": 4,
+      "raceSeq": 2,
+      "date": "2026-07-28",
+      "ai": "claude",
+      "track": "名古屋",
+      "race": "9R",
+      "raceName": "夏の大三角特別B1a",
+      "skipType": "voluntary",
+      "reason": "仮想単勝⑪はEV0.54。⑧-⑪等は事前未宣言・市場売りドリフト・検証中カテゴリのため不採用。",
+      "virtualBets": [
+        {
+          "betType": "単勝",
+          "selection": "11",
+          "stake": 500,
+          "estimatedEV": 0.54,
+          "result": "miss",
+          "finish": 2
+        },
+        {
+          "betType": "ワイド",
+          "selection": "8-11",
+          "actualOdds": 8.1,
+          "result": "hit",
+          "note": "事前未宣言のため正式候補外"
+        }
+      ],
+      "result": "⑧→⑪→④。⑧-⑪ワイドは810円で的中。",
+      "saved": true,
+      "evaluation": {
+        "capitalPreservation": "◎完全保全",
+        "reasonAccuracy": "分割：単勝抑制は正／小額表現は取り逃し",
+        "smallExpression": "あり"
+      },
+      "note": "資本保全と小額表現の取り逃しを分離評価。"
+    },
+    {
+      "meet": 4,
+      "day": 4,
+      "raceSeq": 3,
+      "date": "2026-07-28",
+      "ai": "gpt",
+      "track": "名古屋",
+      "race": "11R",
+      "raceName": "名港盃（SP1）",
+      "skipType": "voluntary",
+      "reason": "事前発動線が全て不成立。価格を見てから④等を単勝へ追加せず見送り。",
+      "virtualBets": [
+        {
+          "betType": "単勝",
+          "selection": "3",
+          "stake": 200,
+          "odds": 6.3,
+          "estimatedEV": 1.13,
+          "result": "miss",
+          "finish": 6
+        }
+      ],
+      "result": "⑦→⑩→⑧。仮想単勝③は6着。",
+      "saved": true,
+      "evaluation": {
+        "capitalPreservation": "◎完全保全",
+        "reasonAccuracy": "一部正",
+        "smallExpression": "あり"
+      },
+      "note": "能力1位⑦は勝利。⑦-⑩の先行競合を過大視し、ワイド接続を事前候補から除外した。"
+    },
+    {
+      "meet": 4,
+      "day": 4,
+      "raceSeq": 3,
+      "date": "2026-07-28",
+      "ai": "claude",
+      "track": "名古屋",
+      "race": "11R",
+      "raceName": "名港盃（SP1）",
+      "skipType": "voluntary",
+      "reason": "全馬単勝EV1.2未満。第1段でワイドスクリーン未宣言のため直前追加を行わず見送り。",
+      "virtualBets": [
+        {
+          "betType": "単勝",
+          "selection": "7",
+          "odds": 3.5,
+          "estimatedEV": 1.05,
+          "result": "hit",
+          "finalOdds": 3.2,
+          "finish": 1
+        },
+        {
+          "betType": "ワイド",
+          "selection": "7-10",
+          "actualOdds": 4.6,
+          "estimatedEV": 1.2,
+          "result": "hit",
+          "finalPayoutPer100": 290
+        }
+      ],
+      "result": "⑦→⑩→⑧。仮想ワイド⑦-⑩は的中。",
+      "saved": false,
+      "evaluation": {
+        "capitalPreservation": "×機会損失950円",
+        "reasonAccuracy": "分割：単勝側は正／ワイド側は書式起因の未審査",
+        "smallExpression": "あり"
+      },
+      "note": "S2初の価格が存在した正解序列の書式的取り逃し。開催⑤から第1段全券種スクリーンへ改訂。"
+    },
+    {
+      "meet": 4,
+      "day": 4,
+      "raceSeq": 4,
+      "date": "2026-07-28",
+      "ai": "gpt",
+      "track": "金沢",
+      "race": "9R",
+      "raceName": "「葛山画伯」記念B2四",
+      "skipType": "voluntary",
+      "reason": "⑤は価格不足、代替候補⑧は点EV1.26でも保守EV0.84のため見送り。",
+      "virtualBets": [
+        {
+          "betType": "単勝",
+          "selection": "8",
+          "stake": 200,
+          "odds": 7.0,
+          "estimatedEV": 1.26,
+          "conservativeEV": 0.84,
+          "result": "miss",
+          "finish": 7
+        }
+      ],
+      "result": "⑤→⑪→⑨。⑤は1着、⑧は7着。",
+      "saved": true,
+      "evaluation": {
+        "capitalPreservation": "◎完全保全",
+        "reasonAccuracy": "正",
+        "smallExpression": "なし"
+      },
+      "note": "能力上位の価格不足後に穴馬へ無理に乗り換えないG-06見送りゲートが機能。"
+    },
+    {
+      "meet": 4,
+      "day": 4,
+      "raceSeq": 4,
+      "date": "2026-07-28",
+      "ai": "claude",
+      "track": "金沢",
+      "race": "9R",
+      "raceName": "「葛山画伯」記念B2四",
+      "skipType": "voluntary",
+      "reason": "序列1位⑧は最終近似価格でEV1.12へ消滅。⑤は転入額面型として消し、全体見送り。",
+      "virtualBets": [
+        {
+          "betType": "単勝",
+          "selection": "8",
+          "odds": 7.0,
+          "estimatedEV": 1.12,
+          "lockedEstimatedEV": 2.4,
+          "result": "miss",
+          "finish": 7
+        },
+        {
+          "betType": "ワイド",
+          "selection": "8-9",
+          "actualOdds": 4.1,
+          "estimatedEV": 0.62,
+          "result": "miss"
+        }
+      ],
+      "result": "⑤→⑪→⑨。⑧は7着、⑤が5馬身差で逃げ切り。",
+      "saved": true,
+      "evaluation": {
+        "capitalPreservation": "◎完全保全",
+        "reasonAccuracy": "分割：保全結論は正／消し⑤の根拠は誤り",
+        "smallExpression": "なし"
+      },
+      "note": "JRA転入初戦・休養なし・降級幅大の⑤を過小評価。"
+    },
+    {
+      "meet": 4,
+      "day": 4,
+      "raceSeq": 5,
+      "date": "2026-07-28",
+      "ai": "gpt",
+      "track": "名古屋",
+      "race": "12R",
+      "raceName": "金シャチ最終戦777C",
+      "skipType": "voluntary",
+      "reason": "序列上位⑧・①が発動線未達。混戦を理由に新たな穴馬を作らず見送り。",
+      "virtualBets": [
+        {
+          "betType": "単勝",
+          "selection": "1",
+          "stake": 200,
+          "odds": 6.5,
+          "estimatedEV": 0.85,
+          "result": "miss",
+          "finish": 7
+        }
+      ],
+      "result": "⑥→⑧→⑫。仮想単勝①は7着。",
+      "saved": true,
+      "evaluation": {
+        "capitalPreservation": "◎完全保全",
+        "reasonAccuracy": "一部正",
+        "smallExpression": "参考あり"
+      },
+      "note": "見送り自体は正解。逃げ候補⑥を認識しながら単騎逃げ時の残存率を過小評価した。"
+    },
+    {
+      "meet": 4,
+      "day": 4,
+      "raceSeq": 5,
+      "date": "2026-07-28",
+      "ai": "claude",
+      "track": "名古屋",
+      "race": "12R",
+      "raceName": "金シャチ最終戦777C",
+      "skipType": "voluntary",
+      "reason": "非抑制側の最大EV⑦1.08で基準未達。④・⑥は下位人気発散型として抑制し見送り。",
+      "virtualBets": [
+        {
+          "betType": "単勝",
+          "selection": "7",
+          "estimatedEV": 1.08,
+          "result": "refund",
+          "note": "⑦除外で検証無効"
+        },
+        {
+          "betType": "ワイド",
+          "selection": "7-8",
+          "estimatedEV": 0.88,
+          "result": "refund",
+          "note": "⑦除外で検証無効"
+        },
+        {
+          "betType": "単勝",
+          "selection": "6",
+          "estimatedWinProb": 5,
+          "lockedOdds": 48.8,
+          "finalOdds": 71.1,
+          "result": "hit",
+          "finish": 1,
+          "note": "抑制対象"
+        }
+      ],
+      "result": "⑥→⑧→⑫。⑥が11番人気で逃げ切り、⑦は除外。",
+      "saved": true,
+      "evaluation": {
+        "capitalPreservation": "◎完全保全",
+        "reasonAccuracy": "分割：非抑制側の見送りは正／下位人気抑制の前提は崩壊",
+        "smallExpression": "なし"
+      },
+      "note": "抑制カテゴリ初の単勝勝利。仮想追跡の正式化候補。"
     }
   ],
   "dailyReports": [
@@ -2054,21 +2821,22 @@
     {
       "date": "2026-07-28",
       "meets": [
-        3
+        3,
+        4
       ],
       "letters": {
-        "gpt": "GPT Fundは開催③を投資3,000円、払戻0円、収支−3,000円、残高25,280円で終了。6レースすべてに参戦して的中0。R2では⑨を能力候補として抽出し2着、R5では不良馬場反映後に①・⑦を上位へ修正して実際の1・2着を捉えたが、券種接続に失敗した。最大の問題は能力上位馬の価格不足後に中位・下位人気へ価値を作りすぎ、見送りが0件となったこと。R6⑤-⑨ワイドは同時馬券内率を過大評価。inputDefectはなく全6Rを通常較正対象とし、G-02・G-06・G-10・G-12の運用を強化する。運用方針・Risk Scoreは変更なし。",
-        "claude": "Claude Fundは開催③を投資1,000円、払戻0円、収支−1,000円、残高27,320円で終了し開催③勝者。C-20事前拘束の初発動2件はともに敗北し、序列1位は通算7/13。両発動は序列1位から市場が離れる上昇価格で、ロック時スナップショットの買い方向ノイズが混入した。⑤消し、R6の数理的見送り、C-19条件外裁定は機能。C-21新設と複勝オッズ配布標準化を提案し、運用方針・Risk Scoreは変更なし。"
+        "gpt": "GPT Fundは7月28日の開催③・④を合算して投資4,000円、払戻0円、収支−4,000円、残高24,280円で終了。開催③は6レース皆勤・全滅だったが、開催④後半3Rでは見送りゲートを実装し、仮想単勝③・⑧・①の不的中を回避した。最大の課題は名港盃で、能力1位⑦と上位⑩の先行競合を過大視し、実際に1・2着となった⑦-⑩ワイドを候補から除外したこと。名古屋12Rでは逃げ候補⑥の単騎残存率を過小評価。開催④R1のワイド行列誤読はinputDefectとして通常較正から分離し、記録不備に計上された。運用方針・Risk Scoreは変更せず、開催⑤から第1段全券種スクリーン、先行競合型／前残り共存型の分離、交差セル再確認を実装する。",
+        "claude": "Claude Fundは7月28日の開催③・④を合算して投資1,000円、払戻0円、収支−1,000円、残高27,320円で終了し、両開催を制した。開催④はS2初の全5R見送りで収支0円。R3では序列1位⑦が勝利したが、第1段にワイドスクリーンがなく⑦-⑩の成立側価格を取り逃した。R4はJRA2勝級からの転入⑤を過小評価し、R5では下位人気発散型として抑制した⑥が71.1倍で逃げ切った。市場変動方向は開催④で主要4件中3件が誤り方向となり、恒久化は保留。運用方針・Risk Scoreは変更せず、第1段全券種スクリーン、JRA転入馬評価、下位人気抑制カテゴリの仮想追跡を次回課題とする。"
       }
     }
   ],
   "operations": {
     "summary": {
-      "unimplementedCandidates": 2,
-      "shortNoticeRaces": 1,
+      "unimplementedCandidates": 3,
+      "shortNoticeRaces": 2,
       "timeouts": 0,
-      "recordIssues": 10,
-      "rulings": 3
+      "recordIssues": 11,
+      "rulings": 4
     },
     "unimplementedCandidates": [
       {
@@ -2086,6 +2854,14 @@
         "track": "金沢",
         "race": "7R",
         "description": "オッズ未貼付のまま発走時刻を経過したため未実施。競技記録外。"
+      },
+      {
+        "id": "S2-OP-UI-03",
+        "date": "2026-07-28",
+        "meet": 4,
+        "track": "金沢",
+        "race": "5R",
+        "description": "専用オッズPDFで全馬除外となり発売価格が存在しなかったため、正式成立前の取りやめとして未実施。競技記録外。"
       }
     ],
     "shortNoticeRaces": [
@@ -2098,6 +2874,17 @@
         "race": "4R",
         "oddsCapturedAt": "13:18",
         "oddsLeadMinutes": 9
+      },
+      {
+        "id": "S2-OP-SN-02",
+        "date": "2026-07-28",
+        "meet": 4,
+        "raceSeq": 4,
+        "track": "金沢",
+        "race": "9R",
+        "oddsCapturedAt": "20:00",
+        "oddsReceivedAt": "20:03",
+        "oddsLeadMinutes": 7
       }
     ],
     "timeouts": {
@@ -2184,6 +2971,14 @@
         "meet": 2,
         "raceSeq": 4,
         "description": "金沢9R⑨のロック時人気を4人気と誤記。正しくは5人気。ロック文・台帳双方を訂正。"
+      },
+      {
+        "id": "S2-OP-RI-11",
+        "date": "2026-07-28",
+        "ai": "gpt",
+        "meet": 4,
+        "raceSeq": 1,
+        "description": "盛岡12Rのワイド④-⑨について、正しい17.5〜19.9倍を60.0〜62.8倍と誤読。正価格でも参戦判定は変わらないが、inputDefect: oddsMatrixReadとして通常EV較正から除外。"
       }
     ],
     "rulings": [
@@ -2210,6 +3005,14 @@
         "type": "procedure_classification",
         "description": "GPTが名古屋4Rで、不良馬場による勝率順位変更後に①-⑦の接続表再比較と不採用理由を記録しなかった件を自己申告。事実不一致ではなく、現行規則に義務化されていない内部手続きの省略として審査。",
         "result": "記録不備には計上せず改善事項とする。GPTプレイブックv1.3で順位変更時の接続表再作成を宣言済み手順へ格上げし、次回以降の省略は手順不備の対象になり得る。"
+      },
+      {
+        "id": "S2-RULING-04",
+        "date": "2026-07-28",
+        "meet": 4,
+        "type": "input_defect_classification",
+        "description": "GPTが開催④R1のワイド④-⑨オッズ誤読を自己申告。配布オッズ表との事実不一致に当たるかを審査。",
+        "result": "記録不備へ計上。ロック・収支は有効で、該当EVのみ通常較正から除外。交差セル画像再確認と転記後読み上げを再発防止手順として登録。"
       }
     ]
   },
