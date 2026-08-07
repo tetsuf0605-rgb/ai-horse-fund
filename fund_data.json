@@ -4,14 +4,14 @@
     "season": 2,
     "unit": "meeting",
     "totalMeets": 10,
-    "completedMeets": 7,
+    "completedMeets": 8,
     "activeMeet": null,
-    "currentMeet": 7,
-    "lastUpdated": "2026-08-03",
+    "currentMeet": 8,
+    "lastUpdated": "2026-08-07",
     "initialBalance": 30000,
     "currency": "JPY",
-    "officialLedger": "AI_Horse_Fund_S2台帳_v8.md",
-    "note": "Season 1はfund_data_s1.jsonとして凍結。Season 2はmeet・raceSeq・dateを正規識別子として別管理する。開催⑦は2026年8月3日に金沢ナイターの正式成立3Rでオーナークローズ。両Fundとも無得点で、GPTは−1,200円、Claudeは−1,500円。GPTは全3Rでオッズ行列の二重確認を完遂しinputDefectゼロ。開催⑦終了時点でClaude 23,820円、GPT 21,280円。"
+    "officialLedger": "AI_Horse_Fund_S2台帳_v9.md",
+    "note": "Season 1はfund_data_s1.jsonとして凍結。Season 2はmeet・raceSeq・dateを正規識別子として別管理する。開催⑧は2026年8月7日に園田の正式成立3Rでクローズ。GPT FundはS2初の投資0円開催で3Rすべて自主見送り、収支±0円。Claude FundはR3ワイド2-7を500円購入して不的中、収支−500円。開催⑧終了時点でClaude 23,320円、GPT 21,280円。GPTはP-03逆選択警報でR3単勝④を最終棄却し④4着、初の有効防衛サンプルとなった。P-01は3RすべてでinputDefectゼロを維持。"
   },
   "funds": {
     "gpt": {
@@ -19,7 +19,7 @@
       "style": "事前仮説固定・直前EV選別型",
       "riskScore": "4/10",
       "mainBets": "単勝・複勝・ワイド中心／全券種を事前比較",
-      "strategy": "事前仮説と能力順位を固定し、直前価格でEVを選別する。基本EV1.20と保守EVを維持し、能力順位上位の接続を優先する。行列券種は行・列・交差セル・隣接セル・他券種整合を二重確認する。複数の単勝や高配当側だけが発動した場合は、勝ち筋・順位・上位馬崩壊理由を再比較し、価格だけで並列採用しない。"
+      "strategy": "事前仮説と能力順位を固定し、直前価格でEVを選別する。基本EV1.20と保守EVを維持し、能力順位上位の接続を優先する。展開を左右する馬を名指しした場合は勝率・馬券内率を必ず数値化し、馬券内上位群同士を第1段でペア・スクリーンする。行列券種はP-01の二重確認を継続し、高配当・低順位側だけが発動した場合はP-03で完全見送りと再比較する。"
     },
     "claude": {
       "name": "Claude Fund",
@@ -265,6 +265,39 @@
         "bestSkip": "金沢10Rは両Fundが自主見送り。市場上位①⑧⑨へ評価が収束し価格優位が消失、Claudeの反実仮想7本は−850円、GPTの最接近候補⑧も5着で完全保全となった。",
         "priceRisk": "金沢8R⑩は事前9.1倍から直前2.2倍へ超集中後12着、④・⑪は離反後1・2着。金沢9R⑥は7.9→3.1→確定1.7で勝利。市場変動方向は同開催内で2正4逆と大きく振動した。",
         "inputIntegrity": "3R全てで行・列・交差セル・隣接セル・単複枠連整合を確認しinputDefectゼロ。R2では列ズレ誤読候補を二重照合がロック前にブロックした。"
+      }
+    },
+    {
+      "meet": 8,
+      "day": 8,
+      "dates": [
+        "2026-08-07"
+      ],
+      "status": "closed",
+      "closedReason": "three_races",
+      "raceCount": 3,
+      "tracks": [
+        "園田"
+      ],
+      "result": {
+        "winner": "gpt",
+        "gptProfit": 0,
+        "claudeProfit": -500,
+        "gptEndingBalance": 21280,
+        "claudeEndingBalance": 23320,
+        "directMatch": {
+          "gptWins": 1,
+          "claudeWins": 0,
+          "draws": 2,
+          "excluded": 0
+        }
+      },
+      "comments": {
+        "best": "GPTは3Rすべて自主見送りで投資0円。R1は能力上位⑤ヴァンガルダ・③ファイブレイナが1・2着でも価格不足を維持し、R3では機械成立した単勝④アウトサイドベット23.5倍をP-03逆選択警報で棄却、④4着となり初の有効防衛サンプルを得た。",
+        "worst": "GPTはR3で逃げ馬③シンパティアを展開重要馬として認識しながら勝率・馬券内率の主要表から脱落させ、③が逃げ切り。R2でも⑥・②を馬券内候補として評価しながらワイド2-6を第1段でスクリーンできず、分析層から確率・接続層への橋渡しが課題となった。",
+        "bestSkip": "R2は単勝⑥EV1.159を基準未達で見送り、⑥は2着。R3は単勝④だけが高配当で機械成立する逆選択構造を最終棄却し、Claudeのワイド2-7不的中も含めGPTは開催全体を0円で完全保全した。",
+        "priceRisk": "園田昼開催ではR2④が朝116.8倍→直前28.1倍、R3③が58.4倍→12.1倍へ大幅集中して両馬が勝利。一方で市場変動方向は開催間で振動しているため恒久シグナル化はせず、S2-M01で継続観測する。",
+        "inputIntegrity": "3R全6配布シートで単勝値のシート間ドリフトはなし。P-01照合を継続し、開催⑧もGPT側inputDefectはゼロ。"
       }
     }
   ],
@@ -2461,6 +2494,311 @@
       },
       "directResult": "draw",
       "calibrationNote": "両Fundが上位群へ市場も収束して価格優位なしとして自主見送り。GPTの仮想最接近単勝⑧は5着。勝ち馬⑨・2着①はいずれも候補群内だが発動線未達で、資本保全成功。"
+    },
+    {
+      "meet": 8,
+      "day": 8,
+      "raceSeq": 1,
+      "date": "2026-08-07",
+      "track": "園田",
+      "race": "1R",
+      "raceName": "C3 3歳以上",
+      "surface": "ダート",
+      "distance": 820,
+      "going": "良",
+      "status": "official",
+      "shortNotice": true,
+      "oddsCapturedAt": "14:12",
+      "oddsCapturedAtWide": "14:10",
+      "oddsLeadMinutes": 8,
+      "result": {
+        "first": {
+          "number": 5,
+          "name": "ヴァンガルダ"
+        },
+        "second": {
+          "number": 3,
+          "name": "ファイブレイナ"
+        },
+        "third": {
+          "number": 10,
+          "name": "エルマスデセーニ"
+        },
+        "payouts": [
+          {
+            "betType": "単勝",
+            "selection": "5",
+            "per100": 190
+          },
+          {
+            "betType": "複勝",
+            "selection": "5",
+            "per100": 100
+          },
+          {
+            "betType": "複勝",
+            "selection": "3",
+            "per100": 110
+          },
+          {
+            "betType": "複勝",
+            "selection": "10",
+            "per100": 480
+          },
+          {
+            "betType": "ワイド",
+            "selection": "3-5",
+            "per100": 160
+          },
+          {
+            "betType": "ワイド",
+            "selection": "5-10",
+            "per100": 1140
+          },
+          {
+            "betType": "ワイド",
+            "selection": "3-10",
+            "per100": 1290
+          }
+        ]
+      },
+      "profits": {
+        "gpt": 0,
+        "claude": 0
+      },
+      "directResult": "draw",
+      "calibrationNote": "GPTは勝率上位⑤31%・③30%を1・2着まで捉えたが、単勝・複勝・ワイドはいずれも発動線未達で見送り。能力評価と価格判断を分離した完全保全。"
+    },
+    {
+      "meet": 8,
+      "day": 8,
+      "raceSeq": 2,
+      "date": "2026-08-07",
+      "track": "園田",
+      "race": "4R",
+      "raceName": "C3三 3歳以上",
+      "surface": "ダート",
+      "distance": 1400,
+      "going": "良",
+      "status": "official",
+      "shortNotice": null,
+      "shortNoticeStatus": "pending",
+      "oddsCapturedAt": "15:38",
+      "oddsCapturedAtWide": "15:39",
+      "oddsLeadMinutes": 11,
+      "oddsReceivedLeadMinutes": 9,
+      "shortNoticeNote": "Claudeはシート印字時刻基準で非該当、GPTは実受領時刻基準で該当申告。S2-PENDING-06-2に従属。",
+      "result": {
+        "first": {
+          "number": 4,
+          "name": "ステラマリーナ"
+        },
+        "second": {
+          "number": 6,
+          "name": "セトノダイヤモンド"
+        },
+        "third": {
+          "number": 2,
+          "name": "ジョイブラック"
+        },
+        "payouts": [
+          {
+            "betType": "単勝",
+            "selection": "4",
+            "per100": 4630
+          },
+          {
+            "betType": "複勝",
+            "selection": "4",
+            "per100": 470
+          },
+          {
+            "betType": "複勝",
+            "selection": "6",
+            "per100": 180
+          },
+          {
+            "betType": "複勝",
+            "selection": "2",
+            "per100": 170
+          },
+          {
+            "betType": "ワイド",
+            "selection": "4-6",
+            "per100": 1450
+          },
+          {
+            "betType": "ワイド",
+            "selection": "2-4",
+            "per100": 1680
+          },
+          {
+            "betType": "ワイド",
+            "selection": "2-6",
+            "per100": 570
+          }
+        ]
+      },
+      "profits": {
+        "gpt": 0,
+        "claude": 0
+      },
+      "directResult": "draw",
+      "oddsMovement": {
+        "observed": [
+          {
+            "selection": "4",
+            "earlierOdds": 116.8,
+            "lockedOdds": 28.1,
+            "direction": "shorten",
+            "resultFinish": 1
+          },
+          {
+            "selection": "6",
+            "earlierOdds": 8.6,
+            "lockedOdds": 6.1,
+            "direction": "shorten",
+            "resultFinish": 2
+          },
+          {
+            "selection": "5",
+            "earlierOdds": 15.5,
+            "lockedOdds": 51.1,
+            "direction": "drift",
+            "resultFinish": 5
+          },
+          {
+            "selection": "3",
+            "earlierOdds": 23.3,
+            "lockedOdds": 47.8,
+            "direction": "drift",
+            "resultFinish": 9
+          },
+          {
+            "selection": "8",
+            "earlierOdds": 11.6,
+            "lockedOdds": 23.4,
+            "direction": "drift",
+            "resultFinish": 6
+          }
+        ],
+        "note": "朝→直前の大幅集中④が勝利。市場変動方向はS2-M01の観測素材とし、単独の買いシグナルにはしない。"
+      },
+      "calibrationNote": "GPTは⑥を勝率2位、②を馬券内候補として2・3着を捉えたが、勝ち馬④を主要能力群へ入れず、②-⑥ワイドも第1段接続表へ候補化できなかった。単勝⑥はEV1.159で見送り、資本保全。"
+    },
+    {
+      "meet": 8,
+      "day": 8,
+      "raceSeq": 3,
+      "date": "2026-08-07",
+      "track": "園田",
+      "race": "5R",
+      "raceName": "C3二 3歳以上",
+      "surface": "ダート",
+      "distance": 1400,
+      "going": "良",
+      "status": "official",
+      "shortNotice": false,
+      "oddsCapturedAt": "16:14",
+      "oddsCapturedAtWide": "16:14",
+      "oddsLeadMinutes": 11,
+      "result": {
+        "first": {
+          "number": 3,
+          "name": "シンパティア"
+        },
+        "second": {
+          "number": 5,
+          "name": "メイショウマサカリ"
+        },
+        "third": {
+          "number": 1,
+          "name": "クライオブジアース"
+        },
+        "payouts": [
+          {
+            "betType": "単勝",
+            "selection": "3",
+            "per100": 700
+          },
+          {
+            "betType": "複勝",
+            "selection": "3",
+            "per100": 240
+          },
+          {
+            "betType": "複勝",
+            "selection": "5",
+            "per100": 170
+          },
+          {
+            "betType": "複勝",
+            "selection": "1",
+            "per100": 150
+          },
+          {
+            "betType": "ワイド",
+            "selection": "3-5",
+            "per100": 760
+          },
+          {
+            "betType": "ワイド",
+            "selection": "1-3",
+            "per100": 730
+          },
+          {
+            "betType": "ワイド",
+            "selection": "1-5",
+            "per100": 490
+          }
+        ]
+      },
+      "profits": {
+        "gpt": 0,
+        "claude": -500
+      },
+      "directResult": "gpt",
+      "oddsMovement": {
+        "observed": [
+          {
+            "selection": "1",
+            "earlierOdds": 13.4,
+            "lockedOdds": 3.4,
+            "direction": "shorten",
+            "resultFinish": 3
+          },
+          {
+            "selection": "3",
+            "earlierOdds": 58.4,
+            "lockedOdds": 12.1,
+            "direction": "shorten",
+            "resultFinish": 1
+          },
+          {
+            "selection": "8",
+            "earlierOdds": 6.2,
+            "lockedOdds": 2.9,
+            "direction": "shorten",
+            "resultFinish": 7
+          },
+          {
+            "selection": "2",
+            "earlierOdds": 1.5,
+            "lockedOdds": 4.8,
+            "direction": "drift",
+            "resultFinish": 8
+          },
+          {
+            "selection": "4",
+            "earlierOdds": 10.9,
+            "lockedOdds": 23.5,
+            "direction": "drift",
+            "resultFinish": 4
+          }
+        ],
+        "note": "③への大幅集中は正解方向、②の単勝離反は8着と同方向。単複プール間では②の信頼度が逆転していた。"
+      },
+      "calibrationNote": "GPTは③を展開上のハナ候補として認識しながら勝率・馬券内率の主要表から脱落させ、分析層→確率層の接続切れを自己申告。単勝④23.5倍は機械成立したがP-03逆選択警報で棄却し④4着、初の有効防衛サンプル。"
     }
   ],
   "transactions": [
@@ -3381,6 +3719,29 @@
       "robustnessMarginPt": 1.4,
       "eval": "悪い判断・不的中",
       "note": "⑨ピースオーシャンは3着、②ブルーメリーは10着。最脆弱採用で、複勝②と同一仮説へ1,000円を集中した。"
+    },
+    {
+      "meet": 8,
+      "day": 8,
+      "raceSeq": 3,
+      "date": "2026-08-07",
+      "ai": "claude",
+      "track": "園田",
+      "race": "5R",
+      "raceName": "C3二 3歳以上",
+      "strategy": "C-25独立根拠相手とのワイド発動",
+      "confidence": "C",
+      "betType": "ワイド",
+      "selection": "2-7",
+      "stake": 500,
+      "payout": 0,
+      "status": "miss",
+      "estimatedHitProb": 19,
+      "oddsRange": "11.9-14.2",
+      "estimatedEV": 2.261,
+      "robustnessMarginPt": 8.9,
+      "eval": "悪い判断・不的中",
+      "note": "②ララアンセストラル8着・⑦メタルメタリカ5着。相手⑦は4角2番手まで進出したが、序列1位軸②が崩壊。"
     }
   ],
   "skips": [
@@ -4585,6 +4946,169 @@
         "smallExpression": "なし"
       },
       "note": "三者の上位評価が市場へ収束し、価格優位が消失した初の完全形。"
+    },
+    {
+      "meet": 8,
+      "day": 8,
+      "raceSeq": 1,
+      "date": "2026-08-07",
+      "ai": "gpt",
+      "track": "園田",
+      "race": "1R",
+      "raceName": "C3 3歳以上",
+      "skipType": "voluntary",
+      "reason": "第1段の9候補が全て発動線未達。能力上位⑤・③に市場が収束し、価格優位なしとして見送り。",
+      "virtualBets": [
+        {
+          "betType": "単勝",
+          "selection": "3",
+          "odds": 3.2,
+          "estimatedEV": 0.96,
+          "result": "miss",
+          "finish": 2
+        },
+        {
+          "betType": "ワイド",
+          "selection": "3-5",
+          "oddsRange": "1.3-1.5",
+          "result": "hit",
+          "finalPayoutPer100": 160,
+          "note": "発動線3.0倍未達"
+        }
+      ],
+      "result": "⑤→③→⑩。能力上位⑤・③が1・2着。ワイド3-5は的中したが価格不足。",
+      "saved": true,
+      "evaluation": {
+        "capitalPreservation": "◎完全保全",
+        "reasonAccuracy": "正",
+        "smallExpression": "なし"
+      },
+      "note": "能力評価と価格判断を分離した純粋な価格不足見送り。"
+    },
+    {
+      "meet": 8,
+      "day": 8,
+      "raceSeq": 1,
+      "date": "2026-08-07",
+      "ai": "claude",
+      "track": "園田",
+      "race": "1R",
+      "raceName": "C3 3歳以上",
+      "skipType": "voluntary",
+      "reason": "宣言7本すべて発動線不充足。最接近ワイド3-7もEV0.952で基準未達。",
+      "virtualBets": [
+        {
+          "betType": "ワイド",
+          "selection": "3-7",
+          "estimatedEV": 0.952,
+          "result": "miss"
+        }
+      ],
+      "result": "⑤→③→⑩。序列上位③は2着、⑤は1着。価格不足見送り。",
+      "saved": true,
+      "evaluation": {
+        "capitalPreservation": "◎完全保全",
+        "reasonAccuracy": "正",
+        "smallExpression": "なし"
+      },
+      "note": "C-06の価格不足見送りが機能。"
+    },
+    {
+      "meet": 8,
+      "day": 8,
+      "raceSeq": 2,
+      "date": "2026-08-07",
+      "ai": "gpt",
+      "track": "園田",
+      "race": "4R",
+      "raceName": "C3三 3歳以上",
+      "skipType": "voluntary",
+      "reason": "第1段14候補が全て発動線未達。最接近の単勝⑥6.1倍も点EV1.159で基本EV1.20未満。",
+      "virtualBets": [
+        {
+          "betType": "単勝",
+          "selection": "6",
+          "odds": 6.1,
+          "estimatedEV": 1.159,
+          "result": "miss",
+          "finish": 2
+        },
+        {
+          "betType": "ワイド",
+          "selection": "2-6",
+          "actualOdds": 5.7,
+          "result": "hit",
+          "finalPayoutPer100": 570,
+          "note": "第1段候補外。両馬は個別に馬券内候補だったため接続漏れを検証対象とする。"
+        }
+      ],
+      "result": "④→⑥→②。⑥・②は好走したが、勝ち馬④を主要能力群から取り逃した。",
+      "saved": true,
+      "evaluation": {
+        "capitalPreservation": "◎完全保全",
+        "reasonAccuracy": "一部正",
+        "smallExpression": "あり"
+      },
+      "note": "資本保全は成功。馬券内上位群のペア・スクリーン不足をP-02/G-10改訂素材とする。"
+    },
+    {
+      "meet": 8,
+      "day": 8,
+      "raceSeq": 2,
+      "date": "2026-08-07",
+      "ai": "claude",
+      "track": "園田",
+      "race": "4R",
+      "raceName": "C3三 3歳以上",
+      "skipType": "voluntary",
+      "reason": "宣言7本すべて発動線不充足。最接近は複勝⑧EV0.880で、価格不足として見送り。",
+      "virtualBets": [
+        {
+          "betType": "複勝",
+          "selection": "8",
+          "estimatedEV": 0.88,
+          "result": "miss",
+          "finish": 6
+        }
+      ],
+      "result": "④→⑥→②。序列1位①は7着。見送りにより損失を回避。",
+      "saved": true,
+      "evaluation": {
+        "capitalPreservation": "◎完全保全",
+        "reasonAccuracy": "一部正",
+        "smallExpression": "なし"
+      },
+      "note": "C反実仮想7本は−2,650円で、発動線防衛が大きく機能した。"
+    },
+    {
+      "meet": 8,
+      "day": 8,
+      "raceSeq": 3,
+      "date": "2026-08-07",
+      "ai": "gpt",
+      "track": "園田",
+      "race": "5R",
+      "raceName": "C3二 3歳以上",
+      "skipType": "voluntary",
+      "reason": "15候補中、単勝④23.5倍のみ機械成立したが、上位②・⑤が価格不足で3位④だけが高配当発動するP-03逆選択構造として最終棄却。",
+      "virtualBets": [
+        {
+          "betType": "単勝",
+          "selection": "4",
+          "odds": 23.5,
+          "estimatedEV": 3.29,
+          "result": "miss",
+          "finish": 4
+        }
+      ],
+      "result": "③→⑤→①。④は4着。P-03による棄却は防衛方向に機能したが、勝ち馬③を確率表から脱落させた。",
+      "saved": true,
+      "evaluation": {
+        "capitalPreservation": "◎完全保全",
+        "reasonAccuracy": "一部正",
+        "smallExpression": "あり"
+      },
+      "note": "P-03初の有効防衛サンプルn=1。展開重要馬③の分析層→確率層接続切れは別の能力評価失敗として分離。"
     }
   ],
   "dailyReports": [
@@ -4658,12 +5182,22 @@
         "gpt": "GPT Fundは開催⑦を投資1,200円、払戻0円、収支−1,200円、残高21,280円で終了し開催勝者。R1は⑧の馬券内評価が3着で部分成功したが単勝接続と⑫追加が失敗。R2は事前上位⑥⑨③④から実際の1〜3着⑥④⑨を全て抽出したが、価格で③-⑥へ接続し不的中。R3は全候補の保守発動線未達で見送り、仮想最接近⑧5着を回避した。3R全てでオッズ行列の二重確認を完遂しinputDefectゼロ。Risk Score 4/10とEV1.20を維持し、複数単勝発動時の勝ち筋再比較と高配当側だけが発動する逆選択警報を強化する。",
         "claude": "Claude Fundは開催⑦を投資1,500円、払戻0円、収支−1,500円、残高23,820円で終了。R1ワイド7-11は⑪2着も⑦8着、R2は複勝②・ワイド2-9が②10着で同一仮説同時失敗。R3は宣言7本全て不成立で見送り、反実仮想−850円を防衛した。C-08消し⑩は断然1人気から最下位で完全成功。C-21最脆弱採用は3連続失敗、C-19下位帯過大の欠陥が再現。P-01二重照合は列ズレ候補を事前にブロックした。"
       }
+    },
+    {
+      "date": "2026-08-07",
+      "meets": [
+        8
+      ],
+      "letters": {
+        "gpt": "GPT Fundは開催⑧を投資0円、払戻0円、収支±0円、残高21,280円で終了し開催勝者。R1は能力上位⑤・③が1・2着でも価格不足を維持し完全保全。R2は⑥・②を馬券内候補として捉えたが勝ち馬④とワイド2-6の候補化を逃した。R3は単勝④23.5倍が機械成立したもののP-03逆選択警報で棄却し④4着となり初の有効防衛。一方、逃げ馬③を展開重要馬として認識しながら確率表から脱落させた。P-01は3RすべてでinputDefectゼロ。Risk Score 4/10とEV1.20を維持し、展開重要馬の強制数値化と馬券内上位群ペア・スクリーンを次開催から強化する。",
+        "claude": "Claude Fundは開催⑧をR1・R2見送り、R3ワイド2-7を500円購入して不的中、収支−500円、残高23,320円で終了。R1・R2は発動線防衛で完全保全したが、R3は序列1位②が8着となり軸崩壊。開催⑧の反実仮想21本は投下10,500円・払戻3,450円・収支−7,050円で、非購入20本の防衛額は+6,550円。序列下半分のR2④・R3③が連続勝利し、展開・勝ち筋を確率へ接続する課題がGPTと共通して表面化した。"
+      }
     }
   ],
   "operations": {
     "summary": {
       "unimplementedCandidates": 7,
-      "shortNoticeRaces": 8,
+      "shortNoticeRaces": 9,
       "timeouts": 0,
       "recordIssues": 12,
       "rulings": 5,
@@ -4812,6 +5346,17 @@
         "race": "9R",
         "oddsCapturedAt": "19:55",
         "oddsLeadMinutes": 8
+      },
+      {
+        "id": "S2-OP-SN-09",
+        "date": "2026-08-07",
+        "meet": 8,
+        "raceSeq": 1,
+        "track": "園田",
+        "race": "1R",
+        "oddsCapturedAt": "14:10/14:12",
+        "oddsLeadMinutes": 8,
+        "note": "発走基準で約7〜8分前。GPT該当・Claude保留付き該当で方向一致し、shortNotice確定9件目。"
       }
     ],
     "timeouts": {
@@ -4977,10 +5522,10 @@
     "pendingIssues": [
       {
         "id": "S2-PENDING-06-2",
-        "date": "2026-07-31",
-        "meet": 6,
-        "raceSeq": 3,
-        "description": "shortNotice境界判定。開催⑥R3名古屋2Rの10分丁度に加え、開催⑦R1金沢8RでClaude非該当・GPT該当の同型2件目が発生。発走基準か締切基準か、および受領時刻の定義を一括確定する。",
+        "date": "2026-08-07",
+        "meet": 8,
+        "raceSeq": 2,
+        "description": "shortNotice判定基準（発走基準か締切基準か）に加え、受領時刻の定義（シート印字時刻か実受領時刻か）を一括確定する。開催⑧R2園田4RでClaudeは15:38/15:39のシート時刻基準で非該当、GPTは実受領時刻基準で約9分前として該当申告し、定義乖離の初の明示例が追加された。確定9件・境界係争2件・定義乖離1件が裁定素材。",
         "impact": "運営カウンタのみ。各レース・ロック・収支に影響なし。"
       },
       {
@@ -4999,6 +5544,27 @@
         "meet": 7,
         "description": "同時刻表記の単複・ワイドシート間で単勝値が微差となる場合の正本処理。両AIは各券種を各シートで照合し、単勝比較では低値を保守採用した。",
         "impact": "書式化・三者確認待ち。開催⑦のロック判断と収支は確定済み。"
+      },
+      {
+        "id": "S2-PENDING-08-1",
+        "date": "2026-08-07",
+        "meet": 8,
+        "description": "S2-M06『三者収束＝見送りシグナル』の正式ルール昇格協議。⑦R3・⑧R1・⑧R2のn=3がすべて見送り正解となり、三者協議議題へ提出可能。",
+        "impact": "三者合意までは観測メモ。G-06／P-03の既存見送りゲートは継続適用。"
+      },
+      {
+        "id": "S2-PENDING-08-2",
+        "date": "2026-08-07",
+        "meet": 8,
+        "description": "『展開重要馬の確率接続』を両AI共通課題として検討。GPTはR3③をハナ候補と認識しながら確率表から脱落、ClaudeもR2④・R3③を序列下半分へ置き連続勝利を許した。",
+        "impact": "GPTプレイブックv1.8で展開重要馬の強制数値化を実装。共通正式ルール化は別途協議。"
+      },
+      {
+        "id": "S2-PENDING-N40",
+        "date": "2026-08-07",
+        "meet": 8,
+        "description": "欠陥カテゴリn=40再協議。開催⑧終了時点でn=38、残り2。境界帯のR2④が勝利したため登録閾値の妥当性も論点に追加する。",
+        "impact": "S2-AGREEMENT-01の全面抑制を継続し、n=40到達時に事前登録基準で再協議。"
       }
     ]
   },
