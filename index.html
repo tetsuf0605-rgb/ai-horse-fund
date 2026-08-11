@@ -75,6 +75,22 @@
   .season-sel option{background:var(--panel); color:var(--text); font-weight:600; letter-spacing:normal;}
   .updated{width:100%; font-size:12px; color:var(--muted);}
 
+  /* シーズン終了バナー */
+  .season-closed{
+    display:flex; flex-wrap:wrap; align-items:center; gap:10px 18px;
+    background:linear-gradient(90deg, #1a2a1f 0%, var(--panel) 60%);
+    border:1px solid var(--amber); border-radius:8px; padding:12px 16px; margin-bottom:16px;
+  }
+  .season-closed .badge{
+    font-size:11px; font-weight:800; letter-spacing:.18em; color:#101512;
+    background:var(--amber); border-radius:4px; padding:3px 9px;
+  }
+  .season-closed .champ{font-size:17px; font-weight:800;}
+  .season-closed .champ .trophy{font-size:19px; margin-right:6px;}
+  .season-closed .margin{font-size:13px; color:var(--muted);}
+  .season-closed .margin b{color:var(--text);}
+  .season-closed .warn{font-size:12px; color:var(--focus); font-weight:700;}
+
   section{margin-bottom:30px;}
   h2{
     font-size:15px; letter-spacing:.12em; color:var(--muted); font-weight:700;
@@ -293,6 +309,8 @@
 </header>
 
 <div class="tab-page active" id="page-home">
+<!-- シーズン終了バナー（seasonStatus=closed のときのみ表示） -->
+<div id="season-closed"></div>
 <!-- シーズン進捗コース -->
 <section>
   <h2>SEASON PROGRESS ─ 10開催日コース</h2>
@@ -698,6 +716,39 @@ function balanceSeries(ai, mode, D=DATA){
   return pts;
 }
 
+/* ---------- シーズン終了判定・優勝バナー ---------- */
+// クローズ判定：meta.seasonStatus="closed" が正。無い場合は消化数で後方互換判定
+function isClosed(D=DATA){
+  if(D && D.meta && D.meta.seasonStatus) return D.meta.seasonStatus === "closed";
+  return unitCurrent(D) >= unitTotal(D);
+}
+// 勝者判定：純資産の実測が正。meta.seasonWinner とは照合のみ行い、食い違えば警告を出す
+function seasonVerdict(D=DATA){
+  const g = computeFund("gpt", D), c = computeFund("claude", D);
+  const calc = g.net === c.net ? "draw" : (g.net > c.net ? "gpt" : "claude");
+  const declared = (D.meta && D.meta.seasonWinner) || null;
+  return {g, c, winner: calc, declared, mismatch: !!declared && declared !== calc, margin: Math.abs(g.net - c.net)};
+}
+function renderSeasonBanner(){
+  const el = document.getElementById("season-closed");
+  if(!el) return;
+  if(!isClosed(DATA)){ el.innerHTML = ""; return; }
+  const v = seasonVerdict(DATA);
+  const name = w => w === "gpt" ? "GPT Fund" : "Claude Fund";
+  const champ = v.winner === "draw"
+    ? `<span class="champ" style="color:var(--muted);"><span class="trophy">🤝</span>引き分け</span>`
+    : `<span class="champ" style="color:var(--${v.winner});"><span class="trophy">🏆</span>${name(v.winner)}</span>`;
+  const margin = v.winner === "draw" ? "" :
+    `<span class="margin">最終残高差 <b class="num">+${v.margin.toLocaleString("ja-JP")}円</b>　｜　
+     GPT <b class="num">${v.g.net.toLocaleString("ja-JP")}円</b> ／ Claude <b class="num">${v.c.net.toLocaleString("ja-JP")}円</b></span>`;
+  const warn = v.mismatch
+    ? `<span class="warn">⚠ meta.seasonWinner（${esc(v.declared)}）が取引実測と不一致 ─ 台帳照合が必要</span>` : "";
+  el.innerHTML = `<div class="season-closed">
+    <span class="badge">SEASON ${DATA.meta.season || VIEW_SEASON} CLOSED</span>
+    ${champ}${margin}${warn}
+  </div>`;
+}
+
 /* ---------- ヘッダー ---------- */
 function renderHeader(){
   document.getElementById("h-day").textContent = unitCurrent(DATA);
@@ -710,7 +761,7 @@ function renderSeasonSel(){
   const keys = [...SEASONS.keys()].sort((a,b)=>a-b);
   if(!keys.length){ sel.innerHTML = `<option>SEASON ${DATA.meta.season||1}</option>`; return; }
   sel.innerHTML = keys.map(k =>
-    `<option value="${k}"${k===VIEW_SEASON?" selected":""}>SEASON ${k}${k===CURRENT_SEASON?"":"・終"}</option>`).join("");
+    `<option value="${k}"${k===VIEW_SEASON?" selected":""}>SEASON ${k}${(k<CURRENT_SEASON||isClosed(SEASONS.get(k)))?"・終":""}</option>`).join("");
 }
 document.getElementById("season-sel").addEventListener("change", e => {
   const k = Number(e.target.value);
@@ -734,7 +785,9 @@ function renderCourse(){
     const x = xAt(cur);
     const col = ai==="gpt" ? "var(--gpt)" : "var(--claude)";
     const lbl = ai==="gpt" ? "G" : "C";
-    const star = lead===ai && cur>0 ? `<text x="${x+16}" y="${y+4}" font-size="11" fill="var(--amber)">★首位</text>` : "";
+    const closed = isClosed(DATA);
+    const star = lead===ai && cur>0
+      ? `<text x="${x+16}" y="${y+4}" font-size="11" fill="var(--amber)">${closed?"🏆優勝":"★首位"}</text>` : "";
     return `<circle cx="${x}" cy="${y}" r="10" fill="${col}" stroke="#fff5" stroke-width="2"/>
             <text x="${x}" y="${y+4}" text-anchor="middle" font-size="10" font-weight="800" fill="#101512">${lbl}</text>${star}`;
   };
@@ -770,8 +823,9 @@ function renderFundCards(){
         <div class="stat"><div class="k">見送り</div><div class="v num">${s.skipN}<span style="font-size:11px;">件</span></div></div>
         <div class="stat"><div class="k">投資合計</div><div class="v num">${s.stake.toLocaleString("ja-JP")}</div></div>
         <div class="stat"><div class="k">払戻合計</div><div class="v num">${s.payout.toLocaleString("ja-JP")}</div></div>
-        <div class="stat"><div class="k">最大DD</div><div class="v num">${s.maxDD.toLocaleString("ja-JP")}</div></div>
+        <div class="stat" title="取引1点ごとの残高推移から算出（開催末残高ベースの公式台帳値より大きくなる場合があります）"><div class="k">最大DD<span style="font-size:9px;color:var(--muted);font-weight:600;"> ※取引単位</span></div><div class="v num">${s.maxDD.toLocaleString("ja-JP")}</div></div>
       </div>
+      <div style="padding:6px 14px 0; font-size:11px; color:var(--muted);">※最大DDは取引1点ごとの残高推移から算出（公式台帳は開催末残高ベース）</div>
       <div style="padding:10px 14px; font-size:12px; color:var(--muted); border-top:1px solid var(--line);">現在の戦略：${esc(f.strategy)}</div>
     </div>`;
   }).join("");
@@ -1036,9 +1090,23 @@ function renderOps(){
   const op = DATA.operations;
   if(!op || fmtOf(DATA)!=="meet"){ el.innerHTML = ""; return; }
   const to = op.timeouts || {};
+  // 件数：配列（明細スキーマ）でも数値（旧スキーマ）でも同じように数える
+  const cnt = k => {
+    if(Array.isArray(op[k])) return op[k].length;
+    if(op.summary && typeof op.summary[k] === "number") return op.summary[k];
+    return typeof op[k] === "number" ? op[k] : 0;
+  };
+  const agenda = Array.isArray(op.seasonReviewAgenda) ? op.seasonReviewAgenda : [];
+  const agendaHtml = (isClosed(DATA) && agenda.length) ? `
+    <div style="font-weight:700;font-size:13px;margin:12px 0 4px;">シーズン終了時レビュー議題（${agenda.length}件）</div>
+    <ol class="note" style="margin:0;padding-left:20px;line-height:1.7;">
+      ${agenda.slice().sort((a,b)=>(a.priority||99)-(b.priority||99)).map(a =>
+        `<li>${esc(a.topic||"")}${a.note?`　<span style="color:var(--muted);">— ${esc(a.note)}</span>`:""}</li>`).join("")}
+    </ol>` : "";
   el.innerHTML = `<div class="panel" style="margin-top:12px;">
     <div style="font-weight:700;font-size:13px;margin-bottom:4px;">運営指標（フォーマット比較用）</div>
-    <div class="note">時間切れ：GPT ${to.gpt||0}／Claude ${to.claude||0}　｜　未実施候補 ${op.unimplementedCandidates||0}　｜　短時間配布 ${op.shortNoticeRaces||0}　｜　記録不備 ${op.recordIssues||0}　｜　裁定 ${op.rulings||0}</div>
+    <div class="note">時間切れ：GPT ${to.gpt||0}／Claude ${to.claude||0}　｜　未実施候補 ${cnt("unimplementedCandidates")}　｜　短時間配布 ${cnt("shortNoticeRaces")}　｜　記録不備 ${cnt("recordIssues")}　｜　裁定 ${cnt("rulings")}　｜　合意 ${cnt("agreements")}　｜　未解決 ${cnt("pendingIssues")}</div>
+    ${agendaHtml}
   </div>`;
 }
 
@@ -1260,7 +1328,7 @@ document.getElementById("schema-guide").textContent = SCHEMA_GUIDE;
 
 /* ---------- 一括描画 ---------- */
 function renderAll(){
-  renderHeader(); renderCourse(); renderFundCards(); renderChart();
+  renderHeader(); renderSeasonBanner(); renderCourse(); renderFundCards(); renderChart();
   renderVsStrip(); renderDayCards(); renderOps(); renderLogFilters(); renderLog();
   renderAgg("agg-bet", t=>t.betType, "券種別成績は最初の取引後に自動集計されます。");
   renderAgg("agg-strategy", t=>t.strategy, "戦略別成績は最初の取引後に自動集計されます。");
@@ -1273,7 +1341,7 @@ function seasonSummary(sn){
   const g = computeFund("gpt", D), c = computeFund("claude", D);
   const t = unitWinTally(D);
   const total = unitTotal(D), cur = unitCurrent(D);
-  const finished = sn < CURRENT_SEASON || cur >= total;
+  const finished = sn < CURRENT_SEASON || cur >= total || isClosed(D);
   const winner = !finished ? null : (g.net===c.net ? "draw" : (g.net>c.net ? "gpt" : "claude"));
   return {sn, D, g, c, t, total, cur, finished, winner, dm: directTally(D), fmt: fmtOf(D)};
 }
@@ -1376,7 +1444,7 @@ function renderAllTime(){
   document.getElementById("total-combined").innerHTML = `<table class="log">
     <thead><tr><th>ファンド</th><th>総投資</th><th>総払戻</th><th>通算回収率</th><th>通算的中率</th><th>見送り</th><th>通算損益</th><th>最大DD</th><th>開催勝利</th><th>直対勝利</th></tr></thead>
     <tbody>${row("GPT Fund","gpt",G)}${row("Claude Fund","claude",C)}</tbody></table>
-    <p class="note" style="margin-top:8px;">各シーズンは初期資金リセットの独立会計。通算損益＝各シーズンの（最終純資産−初期資金）の合計。最大DDは全シーズン中の最大値。開催勝利はS1の開催日勝利とS2以降の開催勝利の合算。直対勝利はS2以降の同一レース直接対決（時間切れレース除外）。</p>`;
+    <p class="note" style="margin-top:8px;">各シーズンは初期資金リセットの独立会計。通算損益＝各シーズンの（最終純資産−初期資金）の合計。最大DDは全シーズン中の最大値で、<b>取引1点ごとの残高推移から算出</b>（公式台帳は開催末残高ベースのため値が異なる場合があります）。開催勝利はS1の開催日勝利とS2以降の開催勝利の合算。直対勝利はS2以降の同一レース直接対決（時間切れレース除外）。</p>`;
   // 通算 券種別・戦略別
   const allTx = sums.flatMap(s => (s.D.transactions||[]));
   renderAgg("total-agg-bet", t=>t.betType, "通算券種別成績は最初の取引後に自動集計されます。", allTx);
